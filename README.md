@@ -1,8 +1,9 @@
-# Retrofit+Rxjava+okhttp基本操作和统一处理的demo
+# Rxjava+ReTrofit+okHttp深入浅出-终极封装特殊篇（替换Gson返回）
 
-![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-master/blob/master/gif/http.gif)
-![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-master/blob/master/gif/upload.gif)
-![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-master/blob/master/gif/mu_down.gif)
+##效果
+![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
+
+##功能
 
         1.Retrofit+Rxjava+okhttp基本使用方法
         2.统一处理请求数据格式
@@ -18,46 +19,81 @@
 ##添加相关引用
 ```java
     /*rx-android-java*/
-    compile 'io.reactivex:rxjava:+'
-    compile 'com.squareup.retrofit:adapter-rxjava:+'
-    compile 'com.trello:rxlifecycle:+'
-    compile 'com.trello:rxlifecycle-components:+'
-    /*rotrofit*/
-    compile 'com.squareup.retrofit2:retrofit:+'
-    compile 'com.squareup.retrofit2:converter-gson:+'
-    compile 'com.squareup.retrofit2:adapter-rxjava:+'
-    compile 'com.google.code.gson:gson:+'
+     compile 'io.reactivex:rxjava:+'
+     compile 'com.squareup.retrofit:adapter-rxjava:+'
+     compile 'com.trello:rxlifecycle:+'
+     compile 'com.trello:rxlifecycle-components:+'
+     /*rotrofit*/
+     compile 'com.squareup.retrofit2:retrofit:+'
+     compile 'com.squareup.retrofit2:adapter-rxjava:+'
+     compile 'com.squareup.retrofit2:converter-scalars:+'
+     compile 'com.alibaba:fastjson:+'
 ```
 
 ##代码使用
+
+###1.初始化HttpManager
+
+需要传递一个回调HttpOnNextListener接口和activity生命周期
+
 ```java
-    //    完美封装简化版
-    private void simpleDo() {
-          SubjectPost postEntity = new SubjectPost(simpleOnNextListener,this);
-          postEntity.setAll(true);
-          HttpManager manager = HttpManager.getInstance();
-          manager.doHttpDeal(postEntity);
+  HttpManager manager=new HttpManager(this,this);
+```
+
+###2.初始请求的数据和参数
+
+```java
+public class SubjectPostApi extends BaseApi {
+//    接口需要传入的参数 可自定义不同类型
+    private boolean all;
+    /*任何你先要传递的参数*/
+//    String xxxxx;
+
+    /**
+     * 默认初始化需要给定回调和rx周期类
+     * 可以额外设置请求设置加载框显示，回调等（可扩展）
+     */
+    public SubjectPostApi() {
+        setShowProgress(true);
+        setCancel(true);
+        setCache(true);
+        setMothed("AppFiftyToneGraph/videoLink");
+        setCookieNetWorkTime(60);
+        setCookieNoNetWorkTime(24*60*60);
+    }
+  }
+
+```
+###请求后的统一处理
+
+通过method参数判断接口，然后动态解析返回的数据
+```java
+    @Override
+    public void onNext(String resulte, String method) {
+        /*post返回处理*/
+        if(method.equals(postEntity.getMothed())){
+            List<SubjectResulte>  subjectResulte= JSONObject.parseArray(resulte,SubjectResulte.class);
+            tvMsg.setText("post返回：\n"+subjectResulte.toString() );
+        }
+
+        /*上传返回处理*/
+        if(method.equals(uplaodApi.getMothed())){
+            UploadResulte uploadResulte=JSONObject.parseObject(resulte,UploadResulte.class);
+            tvMsg.setText("上传成功返回：\n"+uploadResulte.getHeadImgUrl());
+            Glide.with(MainActivity.this).load(uploadResulte.getHeadImgUrl()).skipMemoryCache(true).into(img);
+        }
     }
 
-    //   回调一一对应
-    HttpOnNextListener simpleOnNextListener = new HttpOnNextListener<List<Subject>>() {
-        @Override
-        public void onNext(List<Subject> subjects) {
-            tvMsg.setText("已封装：\n" + subjects.toString());
-        }
-
-        /*用户主动调用，默认是不需要覆写该方法*/
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-            tvMsg.setText("失败：\n" + e.toString());
-        }
+    @Override
+    public void onError(Throwable e) {
+        tvMsg.setText("失败：\n" + e.toString());
     }
 ```
 
-* 初始化一个请求数据的对象继承BaseEntity对象，传递一个sub回调对象和context对象，设置请求需要的参数
-* 通过单利获取一个httpmanger对象，触发请求
-* 结果统一通过BaseEntity中的fun1方法判断，最后返回传递的sub对象中
+
+* 初始化一个请求数据的对象继承BaseApi对象设置请求需要的参数
+* 通过httpmanger对象，触发请求
+* 结果统一通过BaseApi中的fun1方法判断，最后返回HttpOnNextListener
 
 ##优化迭代
 根据反馈及时更新和优化的过程，如果在使用过程中有任何问题，欢迎反馈给我！
