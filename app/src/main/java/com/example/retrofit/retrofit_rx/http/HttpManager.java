@@ -1,9 +1,7 @@
 package com.example.retrofit.retrofit_rx.http;
 
-import com.example.retrofit.MyApplication;
 import com.example.retrofit.retrofit_rx.Api.BaseApi;
 import com.example.retrofit.retrofit_rx.exception.RetryWhenNetworkException;
-import com.example.retrofit.retrofit_rx.http.cookie.CacheInterceptor;
 import com.example.retrofit.retrofit_rx.listener.HttpOnNextListener;
 import com.example.retrofit.retrofit_rx.subscribers.ProgressSubscriber;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -11,7 +9,6 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import java.lang.ref.SoftReference;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -42,11 +39,10 @@ public class HttpManager {
     public void doHttpDeal(BaseApi basePar) {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.addInterceptor(new CacheInterceptor());
         builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
+       /* builder.addInterceptor(new CacheInterceptor());
         builder.addNetworkInterceptor(new CacheInterceptor());
-        /*缓存位置和大小*/
-        builder.cache(new Cache(MyApplication.app.getCacheDir(),10*1024*1024));
+        builder.cache(new Cache(MyApplication.app.getCacheDir(),10*1024*1024));*/
 
         /*创建retrofit对象*/
         Retrofit retrofit = new Retrofit.Builder()

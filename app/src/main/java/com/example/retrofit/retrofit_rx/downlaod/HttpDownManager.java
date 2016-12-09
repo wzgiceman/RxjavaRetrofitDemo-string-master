@@ -65,7 +65,7 @@ public class HttpDownManager {
     /**
      * 开始下载
      */
-    public void startDown(DownInfo info){
+    public void startDown(final DownInfo info){
         /*正在下载不处理*/
         if(info==null||subMap.get(info.getUrl())!=null){
             subMap.get(info.getUrl()).setDownInfo(info);
