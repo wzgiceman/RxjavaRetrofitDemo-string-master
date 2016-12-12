@@ -41,14 +41,15 @@
 
 ##代码使用
 
-###初始化
+###1.初始化
 
 在Application中初始化RxRetrofitApp
+
 ```java
  RxRetrofitApp.init(this);
 ```
 
-###1.初始化HttpManager
+###2.初始化HttpManager
 
 需要传递一个回调HttpOnNextListener接口和activity生命周期
 
@@ -56,7 +57,7 @@
   HttpManager manager=new HttpManager(this,this);
 ```
 
-###2.初始请求的数据和参数
+###3.初始请求的数据和参数
 
 ```java
 public class SubjectPostApi extends BaseApi {
@@ -80,7 +81,7 @@ public class SubjectPostApi extends BaseApi {
   }
 
 ```
-###请求后的统一处理
+###4.请求后的统一处理
 
 通过method参数判断接口，然后动态解析返回的数据
 ```java
