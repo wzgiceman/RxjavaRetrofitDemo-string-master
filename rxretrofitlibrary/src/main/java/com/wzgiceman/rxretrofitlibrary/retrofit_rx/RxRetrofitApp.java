@@ -18,7 +18,7 @@ public class RxRetrofitApp  {
         return application;
     }
 
-    public static void setApplication(Application application) {
+    private static void setApplication(Application application) {
         RxRetrofitApp.application = application;
     }
 }
