@@ -15,6 +15,7 @@ import com.example.retrofit.entity.api.UploadApi;
 import com.example.retrofit.entity.resulte.SubjectResulte;
 import com.example.retrofit.entity.resulte.UploadResulte;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.ApiException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpManager;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.ProgressRequestBody;
@@ -117,8 +118,8 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onError(Throwable e) {
-        tvMsg.setText("失败：\n" + e.toString());
+    public void onError(ApiException e) {
+        tvMsg.setText("失败：\ncode=" + e.getCode()+"\nmsg:"+e.getDisplayMessage());
     }
 
 }

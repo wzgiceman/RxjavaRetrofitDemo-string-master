@@ -1,6 +1,7 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressSubscriber;
@@ -15,6 +16,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -23,12 +25,12 @@ import rx.schedulers.Schedulers;
  */
 public class HttpManager {
     /*弱引用對象*/
-    private SoftReference<HttpOnNextListener>  onNextListener;
+    private SoftReference<HttpOnNextListener> onNextListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
 
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
-        this.onNextListener=new SoftReference(onNextListener);
-        this.appCompatActivity=new SoftReference(appCompatActivity);
+        this.onNextListener = new SoftReference(onNextListener);
+        this.appCompatActivity = new SoftReference(appCompatActivity);
     }
 
     /**
@@ -51,13 +53,15 @@ public class HttpManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(basePar.getBaseUrl())
                 .build();
-        HttpService  httpService = retrofit.create(HttpService.class);
+        HttpService httpService = retrofit.create(HttpService.class);
 
         /*rx处理*/
-        ProgressSubscriber subscriber=new ProgressSubscriber(basePar,onNextListener,appCompatActivity);
+        ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
         Observable observable = basePar.getObservable(httpService)
                 /*失败后的retry配置*/
                 .retryWhen(new RetryWhenNetworkException())
+                /*异常处理*/
+                .onErrorResumeNext(funcException)
                 /*生命周期管理*/
                 .compose(appCompatActivity.get().bindToLifecycle())
                 /*http请求线程*/
@@ -71,4 +75,16 @@ public class HttpManager {
         /*数据回调*/
         observable.subscribe(subscriber);
     }
+
+
+    /**
+     * 异常处理
+     */
+    Func1 funcException = new Func1<Throwable, Observable>() {
+        @Override
+        public Observable call(Throwable throwable) {
+            return Observable.error(FactoryException.analysisExcetpion(throwable));
+        }
+    };
+
 }

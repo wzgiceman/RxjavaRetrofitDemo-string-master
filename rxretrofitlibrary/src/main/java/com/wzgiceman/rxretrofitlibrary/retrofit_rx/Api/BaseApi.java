@@ -1,7 +1,5 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSONObject;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
@@ -111,7 +109,6 @@ public abstract class BaseApi<T> implements Func1<T, String> {
 
     @Override
     public String call(T httpResult) {
-        Log.e("tag","---->"+httpResult.toString());
         BaseResultEntity baseResulte= JSONObject.parseObject(httpResult.toString(),BaseResultEntity.class);
         if (baseResulte.getRet() == 0) {
             throw new HttpTimeException(baseResulte.getMsg());

@@ -1,12 +1,18 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception;
 
 /**
- * 自定义错误信息，统一处理返回处理
+ * 运行时自定义错误信息
+ * 自由添加错误，需要自己扩展
  * Created by WZG on 2016/7/16.
  */
 public class HttpTimeException extends RuntimeException {
+    /*未知错误*/
+    public static final int UNKOWN_ERROR = 0x1002;
+    /*本地无缓存错误*/
+    public static final int NO_CHACHE_ERROR = 0x1003;
+    /*缓存过去错误*/
+    public static final int CHACHE_TIMEOUT_ERROR = 0x1004;
 
-    public static final int NO_DATA = 0x2;
 
     public HttpTimeException(int resultCode) {
         this(getApiExceptionMessage(resultCode));
@@ -23,17 +29,16 @@ public class HttpTimeException extends RuntimeException {
      * @return
      */
     private static String getApiExceptionMessage(int code) {
-        String message = "";
         switch (code) {
-            case NO_DATA:
-                message = "无数据";
-                break;
+            case UNKOWN_ERROR:
+                return "错误：网络错误";
+            case NO_CHACHE_ERROR:
+                return "错误：无缓存数据";
+            case CHACHE_TIMEOUT_ERROR:
+                return "错误：缓存数据过期";
             default:
-                message = "error";
-                break;
-
+                return "错误：未知错误";
         }
-        return message;
     }
 }
 
