@@ -24,11 +24,12 @@
         8.RxLifecycle管理生命周期，防止泄露
         9.文件上传下载(支持多文件，断点续传)
         10.Cache数据持久化和数据库（greenDao）两种缓存机制
+        11.异常统一处理
+
 
 ##添加相关引用
 ```java
     /*rx-android-java*/
-     compile 'io.reactivex:rxjava:+'
      compile 'com.squareup.retrofit:adapter-rxjava:+'
      compile 'com.trello:rxlifecycle:+'
      compile 'com.trello:rxlifecycle-components:+'
