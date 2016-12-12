@@ -24,14 +24,14 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'org.greenrobot:greendao:+'
+    compile 'org.greenrobot:greendao:3.2.0'
     /*rx-android-java*/
     compile 'com.squareup.retrofit:adapter-rxjava:+'
-    compile 'com.trello:rxlifecycle:+'
-    compile 'com.trello:rxlifecycle-components:+'
+    compile 'com.trello:rxlifecycle:1.0'
+    compile 'com.trello:rxlifecycle-components:1.0'
     /*rotrofit*/
-    compile 'com.squareup.retrofit2:retrofit:+'
-    compile 'com.squareup.retrofit2:converter-scalars:+'
-    compile 'com.squareup.retrofit2:adapter-rxjava:+'
-    compile 'com.alibaba:fastjson:+'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.alibaba:fastjson:1.2.22'
 }
