@@ -1,7 +1,8 @@
 package com.example.retrofit.entity.api;
 
-import com.example.retrofit.retrofit_rx.Api.BaseApi;
-import com.example.retrofit.retrofit_rx.http.HttpService;
+
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 
 import rx.Observable;
 
@@ -28,8 +29,8 @@ public class SubjectPostApi extends BaseApi {
         setCancel(true);
         setCache(true);
         setMothed("AppFiftyToneGraph/videoLink");
-        setCookieNetWorkTime(60);
-        setCookieNoNetWorkTime(24*60*60);
+        setCookieNetWorkTime(0);
+        setCookieNoNetWorkTime(0);
     }
 
 

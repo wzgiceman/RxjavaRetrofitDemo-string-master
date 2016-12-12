@@ -7,11 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 
 import com.example.retrofit.R;
 import com.example.retrofit.activity.adapter.DownAdapter;
-import com.example.retrofit.retrofit_rx.utils.DbUtil;
-import com.example.retrofit.retrofit_rx.downlaod.DownInfo;
-import com.example.retrofit.retrofit_rx.downlaod.DownState;
 import com.jude.easyrecyclerview.EasyRecyclerView;
-
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownInfo;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownState;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.utils.DbUtil;
 import java.io.File;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class DownLaodActivity extends AppCompatActivity {
 
     /*数据*/
     private void initResource(){
-        dbUtil=DbUtil.getInstance();
+        dbUtil= DbUtil.getInstance();
         listData=dbUtil.queryDownAll();
         /*第一次模拟服务器返回数据掺入到数据库中*/
         if(listData.isEmpty()){

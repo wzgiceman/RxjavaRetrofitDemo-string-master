@@ -14,18 +14,20 @@ import com.example.retrofit.entity.api.SubjectPostApi;
 import com.example.retrofit.entity.api.UploadApi;
 import com.example.retrofit.entity.resulte.SubjectResulte;
 import com.example.retrofit.entity.resulte.UploadResulte;
-import com.example.retrofit.retrofit_rx.http.HttpManager;
-import com.example.retrofit.retrofit_rx.listener.HttpOnNextListener;
-import com.example.retrofit.retrofit_rx.listener.upload.ProgressRequestBody;
-import com.example.retrofit.retrofit_rx.listener.upload.UploadProgressListener;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpManager;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.ProgressRequestBody;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.UploadProgressListener;
+
 import java.io.File;
 import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class MainActivity extends RxAppCompatActivity implements View.OnClickListener ,HttpOnNextListener{
+public class MainActivity extends RxAppCompatActivity implements View.OnClickListener ,HttpOnNextListener {
     private TextView tvMsg;
     private NumberProgressBar progressBar;
     private ImageView img;

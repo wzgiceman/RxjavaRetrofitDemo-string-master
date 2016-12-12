@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
+
 
 android {
     compileSdkVersion 23
@@ -26,21 +26,9 @@ android {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:+'
-
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.jude:easyrecyclerview:+'
     compile 'com.android.support:recyclerview-v7:+'
-    compile 'org.greenrobot:greendao:+'
-
-
-    /*rx-android-java*/
-    compile 'com.squareup.retrofit:adapter-rxjava:+'
-    compile 'com.trello:rxlifecycle:+'
-    compile 'com.trello:rxlifecycle-components:+'
-    /*rotrofit*/
-    compile 'com.squareup.retrofit2:retrofit:+'
-    compile 'com.squareup.retrofit2:converter-scalars:+'
-    compile 'com.squareup.retrofit2:adapter-rxjava:+'
-    compile 'com.alibaba:fastjson:+'
+    compile project(':rxretrofitlibrary')
 }
