@@ -41,6 +41,13 @@
 
 ##代码使用
 
+###初始化
+
+在Application中初始化RxRetrofitApp
+```java
+ RxRetrofitApp.init(this);
+```
+
 ###1.初始化HttpManager
 
 需要传递一个回调HttpOnNextListener接口和activity生命周期
