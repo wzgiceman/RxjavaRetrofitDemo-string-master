@@ -10,7 +10,7 @@ public class HttpTimeException extends RuntimeException {
     public static final int UNKOWN_ERROR = 0x1002;
     /*本地无缓存错误*/
     public static final int NO_CHACHE_ERROR = 0x1003;
-    /*缓存过去错误*/
+    /*缓存过时错误*/
     public static final int CHACHE_TIMEOUT_ERROR = 0x1004;
 
 
