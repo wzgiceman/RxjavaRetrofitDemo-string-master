@@ -121,3 +121,9 @@ public class SubjectPostApi extends BaseApi {
 [Rxjava+ReTrofit+okHttp深入浅出-终极封装](http://blog.csdn.net/column/details/13297.html)
 
 **如有帮助，欢迎start和follow后续会出更多好的开源技术**
+
+#                                     微信交流群
+
+![](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/wxq.png)
+
+[**最近有幸被CSDN提名参加博客之星评选，希望你能投我一票!**](http://blog.csdn.net/vote/candidate.html?username=u014610664)

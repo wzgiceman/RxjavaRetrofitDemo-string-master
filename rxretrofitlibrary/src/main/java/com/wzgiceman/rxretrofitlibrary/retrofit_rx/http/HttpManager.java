@@ -4,6 +4,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressSubscriber;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -27,10 +28,17 @@ public class HttpManager {
     /*弱引用對象*/
     private SoftReference<HttpOnNextListener> onNextListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
+    private SoftReference<HttpOnNextSubListener> onNextSubListener;
 
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
         this.onNextListener = new SoftReference(onNextListener);
         this.appCompatActivity = new SoftReference(appCompatActivity);
+    }
+
+    public HttpManager(SoftReference<RxAppCompatActivity> appCompatActivity, SoftReference<HttpOnNextSubListener>
+            onNextSubListener) {
+        this.appCompatActivity = new SoftReference(appCompatActivity);
+        this.onNextSubListener = new SoftReference(onNextSubListener);
     }
 
     /**

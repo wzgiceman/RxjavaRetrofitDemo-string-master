@@ -18,6 +18,7 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.ApiException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpManager;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.ProgressRequestBody;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.UploadProgressListener;
 
@@ -27,8 +28,9 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import rx.Observable;
 
-public class MainActivity extends RxAppCompatActivity implements View.OnClickListener ,HttpOnNextListener {
+public class MainActivity extends RxAppCompatActivity implements View.OnClickListener ,HttpOnNextListener,HttpOnNextSubListener {
     private TextView tvMsg;
     private NumberProgressBar progressBar;
     private ImageView img;
@@ -122,4 +124,13 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
         tvMsg.setText("失败：\ncode=" + e.getCode()+"\nmsg:"+e.getDisplayMessage());
     }
 
+
+
+    private void HttpFlatMap(){
+    }
+
+    @Override
+    public void onNext(Observable observable) {
+
+    }
 }
