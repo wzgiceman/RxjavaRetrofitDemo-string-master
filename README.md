@@ -44,6 +44,12 @@
 
 ###1.初始化
 
+moudel导入工程
+
+```java
+  compile project(':rxretrofitlibrary')
+```
+
 在Application中初始化RxRetrofitApp
 
 ```java
