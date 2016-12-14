@@ -31,22 +31,28 @@ public class FactoryException {
     public static ApiException analysisExcetpion(Throwable e) {
         ApiException apiException = new ApiException(e);
         if (e instanceof HttpException) {
+             /*网络异常*/
             apiException.setCode(CodeException.HTTP_ERROR);
             apiException.setDisplayMessage(HttpException_MSG);
         } else if (e instanceof HttpTimeException) {
+             /*自定义运行时异常*/
             HttpTimeException exception = (HttpTimeException) e;
             apiException.setCode(CodeException.RUNTIME_ERROR);
             apiException.setDisplayMessage(exception.getMessage());
         } else if (e instanceof ConnectException||e instanceof SocketTimeoutException) {
+             /*链接异常*/
             apiException.setCode(CodeException.HTTP_ERROR);
             apiException.setDisplayMessage(ConnectException_MSG);
         } else if (e instanceof JSONPathException || e instanceof JSONException || e instanceof ParseException) {
+             /*fastjson解析异常*/
             apiException.setCode(CodeException.JSON_ERROR);
             apiException.setDisplayMessage(JSONException_MSG);
         }else if (e instanceof UnknownHostException){
+            /*无法解析该域名异常*/
             apiException.setCode(CodeException.UNKOWNHOST_ERROR);
             apiException.setDisplayMessage(UnknownHostException_MSG);
         } else {
+            /*未知异常*/
             apiException.setCode(CodeException.UNKNOWN_ERROR);
             apiException.setDisplayMessage(e.getMessage());
         }

@@ -15,7 +15,7 @@ public class HttpTimeException extends RuntimeException {
 
 
     public HttpTimeException(int resultCode) {
-        this(getApiExceptionMessage(resultCode));
+        super(getApiExceptionMessage(resultCode));
     }
 
     public HttpTimeException(String detailMessage) {

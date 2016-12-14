@@ -19,7 +19,7 @@ import rx.Observable;
  */
 public interface HttpService {
 
-    @POST("AppFiftyToneGraph/videoLink")
+    @POST("AppFiftyToneGraph/videoLinktest")
     Observable<String> getAllVedioBy(@Body boolean once_no);
 
     /*断点续传下载接口*/

@@ -126,9 +126,6 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
 
 
 
-    private void HttpFlatMap(){
-    }
-
     @Override
     public void onNext(Observable observable) {
 
