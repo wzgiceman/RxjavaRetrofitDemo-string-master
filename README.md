@@ -9,10 +9,8 @@
 
 这里就介绍如何放弃GsonConverterFactory，直接返回String，灵活我们的封装！
 
-##效果
-![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
 
-##功能
+##具备功能
 
         1.Retrofit+Rxjava+okhttp基本使用方法
         2.统一处理请求数据格式
@@ -25,6 +23,10 @@
         9.文件上传下载(支持多文件，断点续传)
         10.Cache数据持久化和数据库（greenDao）两种缓存机制
         11.异常统一处理
+
+##效果
+![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
+
 
 
 ##添加相关引用
