@@ -1,6 +1,6 @@
 ## Rxjava+ReTrofit+okHttp深入浅出-终极封装特殊篇（替换Gson返回）
 
-##背景
+##介绍
 
 封装原理博客专栏：
 
