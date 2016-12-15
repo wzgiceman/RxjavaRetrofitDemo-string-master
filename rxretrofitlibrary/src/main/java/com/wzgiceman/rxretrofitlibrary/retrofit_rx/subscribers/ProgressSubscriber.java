@@ -31,7 +31,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     private boolean showPorgress = true;
     //    回调接口
     private SoftReference<HttpOnNextListener> mSubscriberOnNextListener;
-    //    弱引用反正内存泄露
+    //    软引用反正内存泄露
     private SoftReference<Context> mActivity;
     //    加载框可自己定义
     private ProgressDialog pd;
@@ -154,34 +154,34 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      */
     private void getCache() {
         Observable.just(api.getUrl()).subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        errorDo(e);
-                    }
+            @Override
+            public void onError(Throwable e) {
+                errorDo(e);
+            }
 
-                    @Override
-                    public void onNext(String s) {
+            @Override
+            public void onNext(String s) {
                            /*获取缓存数据*/
-                        CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(s);
-                        if (cookieResulte == null) {
-                            throw new HttpTimeException(HttpTimeException.NO_CHACHE_ERROR);
-                        }
-                        long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
-                        if (time < api.getCookieNoNetWorkTime()) {
-                            if (mSubscriberOnNextListener.get() != null) {
-                                mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMothed());
-                            }
-                        } else {
-                            CookieDbUtil.getInstance().deleteCookie(cookieResulte);
-                            throw new HttpTimeException(HttpTimeException.CHACHE_TIMEOUT_ERROR);
-                        }
+                CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(s);
+                if (cookieResulte == null) {
+                    throw new HttpTimeException(HttpTimeException.NO_CHACHE_ERROR);
+                }
+                long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
+                if (time < api.getCookieNoNetWorkTime()) {
+                    if (mSubscriberOnNextListener.get() != null) {
+                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMothed());
                     }
-                });
+                } else {
+                    CookieDbUtil.getInstance().deleteCookie(cookieResulte);
+                    throw new HttpTimeException(HttpTimeException.CHACHE_TIMEOUT_ERROR);
+                }
+            }
+        });
     }
 
 
@@ -198,10 +198,10 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         if (e instanceof ApiException) {
             httpOnNextListener.onError((ApiException) e);
         } else if (e instanceof HttpTimeException) {
-            HttpTimeException exception=(HttpTimeException)e;
-            httpOnNextListener.onError(new ApiException(exception,CodeException.RUNTIME_ERROR,exception.getMessage()));
+            HttpTimeException exception = (HttpTimeException) e;
+            httpOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage()));
         } else {
-            httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR,e.getMessage()));
+            httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, e.getMessage()));
         }
         /*可以在这里统一处理错误处理-可自由扩展*/
         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

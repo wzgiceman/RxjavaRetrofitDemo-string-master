@@ -65,14 +65,14 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file_name", file.getName(), new ProgressRequestBody
                 (requestBody,
-                new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long currentBytesCount, long totalBytesCount) {
-                        tvMsg.setText("提示:上传中");
-                        progressBar.setMax((int) totalBytesCount);
-                        progressBar.setProgress((int) currentBytesCount);
-                    }
-                }));
+                        new UploadProgressListener() {
+                            @Override
+                            public void onProgress(long currentBytesCount, long totalBytesCount) {
+                                tvMsg.setText("提示:上传中");
+                                progressBar.setMax((int) totalBytesCount);
+                                progressBar.setProgress((int) currentBytesCount);
+                            }
+                        }));
         uplaodApi.setPart(part);
     }
 
@@ -129,4 +129,5 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     public void onNext(Observable observable) {
 
     }
+
 }

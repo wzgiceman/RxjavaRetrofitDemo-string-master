@@ -1,12 +1,11 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressSubscriber;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.lang.ref.SoftReference;
 import java.util.concurrent.TimeUnit;
@@ -25,20 +24,13 @@ import rx.schedulers.Schedulers;
  * Created by WZG on 2016/7/16.
  */
 public class HttpManager {
-    /*弱引用對象*/
+    /*软引用對象*/
     private SoftReference<HttpOnNextListener> onNextListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
-    private SoftReference<HttpOnNextSubListener> onNextSubListener;
 
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
         this.onNextListener = new SoftReference(onNextListener);
         this.appCompatActivity = new SoftReference(appCompatActivity);
-    }
-
-    public HttpManager(SoftReference<RxAppCompatActivity> appCompatActivity, SoftReference<HttpOnNextSubListener>
-            onNextSubListener) {
-        this.appCompatActivity = new SoftReference(appCompatActivity);
-        this.onNextSubListener = new SoftReference(onNextSubListener);
     }
 
     /**
