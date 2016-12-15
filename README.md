@@ -2,12 +2,12 @@
 
 ##背景
 
-在之前的封装1-5[Rxjava+ReTrofit+okHttp深入浅出-终极封装](http://blog.csdn.net/column/details/13297.html)中我们都是通过传统的GsonConverterFactory自动解析，这样做确实很方便，用户能直接获取返回的对象，不用关心具体的转换，但是：这随之而来有很多的缺陷（虽然官网推荐这样使用）；
+封装原理博客专栏：
 
-比如：无法使用其他第三发转换框架；泛型无法中间传递，封装无法统一处理缓存结果；回调信息无法统一处理..........
-所以我们在享受它遍历的同时也被迫的要限制做很多的处理，限制我们的扩展！
+>[Rxjava+ReTrofit+okHttp深入浅出-终极封装](http://blog.csdn.net/column/details/13297.html)
 
-这里就介绍如何放弃GsonConverterFactory，直接返回String，扩展我们的封装！（封装的整体思想和之前的封装一样，所以不会有大的改动！）
+
+这里就介绍如何放弃GsonConverterFactory，直接返回String，灵活我们的封装！
 
 ##效果
 ![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
