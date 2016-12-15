@@ -5,7 +5,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressDownSubscriber;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.utils.DbUtil;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.utils.DbDwonUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +38,12 @@ public class HttpDownManager {
     /*单利对象*/
     private volatile static HttpDownManager INSTANCE;
     /*数据库类*/
-    private DbUtil db;
+    private DbDwonUtil db;
 
     private HttpDownManager(){
         downInfos=new HashSet<>();
         subMap=new HashMap<>();
-        db=DbUtil.getInstance();
+        db= DbDwonUtil.getInstance();
     }
 
     /**

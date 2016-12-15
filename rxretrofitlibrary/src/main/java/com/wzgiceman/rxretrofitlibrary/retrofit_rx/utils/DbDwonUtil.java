@@ -21,14 +21,14 @@ import java.util.List;
  * Created by WZG on 2016/10/25.
  */
 
-public class DbUtil {
-    private static DbUtil db;
+public class DbDwonUtil {
+    private static DbDwonUtil db;
     private final static String dbName = "tests_db";
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;
 
 
-    public DbUtil() {
+    public DbDwonUtil() {
         context= RxRetrofitApp.getApplication();
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
     }
@@ -38,11 +38,11 @@ public class DbUtil {
      * 获取单例
      * @return
      */
-    public static DbUtil getInstance() {
+    public static DbDwonUtil getInstance() {
         if (db == null) {
             synchronized (HttpDownManager.class) {
                 if (db == null) {
-                    db = new DbUtil();
+                    db = new DbDwonUtil();
                 }
             }
         }

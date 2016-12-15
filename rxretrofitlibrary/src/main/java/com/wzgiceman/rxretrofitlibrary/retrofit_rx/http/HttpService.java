@@ -3,7 +3,8 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -19,8 +20,12 @@ import rx.Observable;
  */
 public interface HttpService {
 
-    @POST("AppFiftyToneGraph/videoLinktest")
-    Observable<String> getAllVedioBy(@Body boolean once_no);
+    @FormUrlEncoded
+    @POST("AppFiftyToneGraph/videoLink")
+    Observable<String> getAllVedioBy(@Field("once_no") boolean once_no);
+
+
+
 
     /*断点续传下载接口*/
     @Streaming/*大文件需要加入这个判断，防止下载过程中写入到内存中*/
