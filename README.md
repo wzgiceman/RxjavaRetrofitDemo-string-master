@@ -7,8 +7,10 @@
 >[Rxjava+ReTrofit+okHttp深入浅出-终极封装](http://blog.csdn.net/column/details/13297.html)
 
 
-这里就介绍如何放弃GsonConverterFactory，直接返回String，灵活我们的封装！
+介绍如何放弃GsonConverterFactory，直接返回String，灵活我们的封装！
 
+
+>[兄弟版本-Rxjava+ReTrofit+okHttp深入浅出-终极封装Gson方案](https://github.com/wzgiceman/RxjavaRetrofitDemo-master)
 
 ##具备功能
 
