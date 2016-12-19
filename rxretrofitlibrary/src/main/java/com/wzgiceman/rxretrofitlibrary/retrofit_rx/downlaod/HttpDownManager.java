@@ -3,7 +3,6 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownLoadListener.DownloadInterceptor;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressDownSubscriber;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.utils.DbDwonUtil;
 
@@ -76,7 +75,7 @@ public class HttpDownManager {
         /*记录回调sub*/
         subMap.put(info.getUrl(),subscriber);
         /*获取service，多次请求公用一个sercie*/
-        HttpService httpService;
+        HttpDownService httpService;
         if(downInfos.contains(info)){
             httpService=info.getService();
         }else{
@@ -92,7 +91,7 @@ public class HttpDownManager {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .baseUrl(getBasUrl(info.getUrl()))
                     .build();
-            httpService= retrofit.create(HttpService.class);
+            httpService= retrofit.create(HttpDownService.class);
             info.setService(httpService);
             downInfos.add(info);
         }

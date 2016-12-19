@@ -2,8 +2,8 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 
+import retrofit2.Retrofit;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -32,10 +32,10 @@ public abstract class BaseApi<T> implements Func1<T, String> {
     /**
      * 设置参数
      *
-     * @param methods
+     * @param retrofit
      * @return
      */
-    public abstract Observable getObservable(HttpService methods);
+    public abstract Observable getObservable(Retrofit retrofit);
 
 
 

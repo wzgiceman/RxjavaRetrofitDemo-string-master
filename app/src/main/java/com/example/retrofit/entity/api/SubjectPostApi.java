@@ -1,9 +1,10 @@
 package com.example.retrofit.entity.api;
 
 
+import com.example.retrofit.HttpPostService;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 
+import retrofit2.Retrofit;
 import rx.Observable;
 
 /**
@@ -11,7 +12,7 @@ import rx.Observable;
  * Created by WZG on 2016/7/16.
  */
 public class SubjectPostApi extends BaseApi {
-//    接口需要传入的参数 可自定义不同类型
+    //    接口需要传入的参数 可自定义不同类型
     private boolean all;
     /*任何你先要传递的参数*/
 //    String xxxxx;
@@ -28,10 +29,7 @@ public class SubjectPostApi extends BaseApi {
     public SubjectPostApi() {
         setShowProgress(true);
         setCancel(true);
-        setMothed("AppFiftyToneGraph/videoLink");
-        setCache(false);
     }
-
 
 
     public boolean isAll() {
@@ -43,7 +41,9 @@ public class SubjectPostApi extends BaseApi {
     }
 
     @Override
-    public Observable getObservable(HttpService methods) {
-        return methods.getAllVedioBy(isAll());
+    public Observable getObservable(Retrofit retrofit) {
+        HttpPostService httpService = retrofit.create(HttpPostService.class);
+        return httpService.getAllVedioBy(isAll());
     }
+
 }

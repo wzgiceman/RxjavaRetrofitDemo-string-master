@@ -1,12 +1,13 @@
 package com.example.retrofit.entity.api;
 
 
+import com.example.retrofit.HttpUploadService;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpService;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Retrofit;
 import rx.Observable;
 
 /**
@@ -21,7 +22,7 @@ public class UploadApi extends BaseApi {
     public UploadApi() {
         setShowProgress(true);
         setMothed("AppYuFaKu/uploadHeadImg");
-        setCache(false);
+        setCache(true);
     }
 
     public MultipartBody.Part getPart() {
@@ -33,10 +34,11 @@ public class UploadApi extends BaseApi {
     }
 
     @Override
-    public Observable getObservable(HttpService methods) {
+    public Observable getObservable(Retrofit retrofit) {
+        HttpUploadService httpService = retrofit.create(HttpUploadService.class);
         RequestBody uid= RequestBody.create(MediaType.parse("text/plain"), "4811420");
         RequestBody key = RequestBody.create(MediaType.parse("text/plain"), "2bd467f727cdf2138c1067127e057950");
-        return methods.uploadImage(uid,key,getPart());
+        return httpService.uploadImage(uid,key,getPart());
     }
 
 }
