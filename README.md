@@ -87,6 +87,16 @@ public class SubjectPostApi extends BaseApi {
         setCookieNetWorkTime(60);
         setCookieNoNetWorkTime(24*60*60);
     }
+
+    /**
+    *通过自定义sercie得到Observable对象
+    *sercie可动态设置，方便扩展
+    */
+    @Override
+    public Observable getObservable(Retrofit retrofit) {
+        HttpPostService httpService = retrofit.create(HttpPostService.class);
+        return httpService.getAllVedioBy(isAll());
+    }
   }
 
 ```
