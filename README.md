@@ -30,21 +30,7 @@
 ![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
 
 
-
-##添加相关引用
-```java
-    /*rx-android-java*/
-     compile 'com.squareup.retrofit:adapter-rxjava:+'
-     compile 'com.trello:rxlifecycle:+'
-     compile 'com.trello:rxlifecycle-components:+'
-     /*rotrofit*/
-     compile 'com.squareup.retrofit2:retrofit:+'
-     compile 'com.squareup.retrofit2:adapter-rxjava:+'
-     compile 'com.squareup.retrofit2:converter-scalars:+'
-     compile 'com.alibaba:fastjson:+'
-```
-
-##代码使用
+##使用
 
 ###1.初始化
 
