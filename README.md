@@ -128,8 +128,8 @@ public class SubjectPostApi extends BaseApi {
 
 
 
-#                                     微信交流群
+#                                     QQ交流群
 
-![](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/wx.jpg)
+![](https://github.com/wzgiceman/Rxbus/blob/master/gif/qq.png)
 
 
