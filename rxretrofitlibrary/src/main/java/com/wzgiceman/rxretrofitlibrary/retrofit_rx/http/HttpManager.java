@@ -61,7 +61,9 @@ public class HttpManager {
                 /*异常处理*/
                 .onErrorResumeNext(funcException)
                 /*生命周期管理*/
-                .compose(appCompatActivity.get().bindToLifecycle())
+                //.compose(appCompatActivity.get().bindToLifecycle())
+                //Note:手动设置在activity onDestroy的时候取消订阅
+                .compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY))
                 /*http请求线程*/
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
