@@ -1,5 +1,6 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers;
 
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -234,6 +235,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         }
     }
 
+
     /**
      * 取消ProgressDialog的时候，取消对observable的订阅，同时也取消了http请求
      */
@@ -242,6 +244,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
             this.unsubscribe();
         }
     }
+
 
 
     public boolean isShowPorgress() {

@@ -7,11 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.retrofit.R;
 import com.example.retrofit.entity.api.SubjectPostApi;
 import com.example.retrofit.entity.api.UploadApi;
+import com.example.retrofit.entity.resulte.BaseResultEntity;
 import com.example.retrofit.entity.resulte.SubjectResulte;
 import com.example.retrofit.entity.resulte.UploadResulte;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -23,7 +25,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.ProgressReque
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.UploadProgressListener;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -107,13 +109,16 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     public void onNext(String resulte, String mothead) {
         /*post返回处理*/
         if (mothead.equals(postEntity.getMothed())) {
-            List<SubjectResulte> subjectResulte= JSONObject.parseArray(resulte,SubjectResulte.class);
-            tvMsg.setText("post返回：\n"+subjectResulte.toString() );
+            BaseResultEntity<ArrayList<SubjectResulte>>   subjectResulte = JSONObject.parseObject(resulte, new
+                    TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>(){});
+            tvMsg.setText("post返回：\n" + subjectResulte.getData().toString());
         }
 
         /*上传返回处理*/
         if (mothead.equals(uplaodApi.getMothed())) {
-            UploadResulte uploadResulte = JSONObject.parseObject(resulte, UploadResulte.class);
+            BaseResultEntity<UploadResulte> subjectResulte = JSONObject.parseObject(resulte, new
+                    TypeReference<BaseResultEntity<UploadResulte>>(){});
+            UploadResulte uploadResulte = subjectResulte.getData();
             tvMsg.setText("上传成功返回：\n" + uploadResulte.getHeadImgUrl());
             Glide.with(MainActivity.this).load(uploadResulte.getHeadImgUrl()).skipMemoryCache(true).into(img);
         }

@@ -12,8 +12,6 @@
 
 >[兄弟版本-Rxjava+ReTrofit+okHttp深入浅出-终极封装Gson方案](https://github.com/wzgiceman/RxjavaRetrofitDemo-master)
 
->[Rxjava+ReTrofit+okHttp极简方式使用-无需任何学习成本](https://github.com/wzgiceman/Rx-Retrofit)
-
 ##具备功能
 
         1.Retrofit+Rxjava+okhttp基本使用方法
@@ -121,6 +119,12 @@ public class SubjectPostApi extends BaseApi {
 * 通过httpmanger对象，触发请求
 * 结果统一通过BaseApi中的fun1方法判断，最后返回HttpOnNextListener
 
+##优化迭代
+根据反馈及时更新和优化的过程，如果在使用过程中有任何问题，欢迎反馈给我！
+
+##思路
+详细思路可以可以参看我的博客：
+[Rxjava+ReTrofit+okHttp深入浅出-终极封装](http://blog.csdn.net/column/details/13297.html)
 
 
 

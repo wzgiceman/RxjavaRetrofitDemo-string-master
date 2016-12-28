@@ -29,6 +29,8 @@ public class SubjectPostApi extends BaseApi {
     public SubjectPostApi() {
         setShowProgress(true);
         setCancel(true);
+        setCache(true);
+        setMothed("AppFiftyToneGraph/videoLink");
     }
 
 

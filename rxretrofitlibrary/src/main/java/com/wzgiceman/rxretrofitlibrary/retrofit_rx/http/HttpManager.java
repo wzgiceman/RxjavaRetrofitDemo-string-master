@@ -43,9 +43,6 @@ public class HttpManager {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
-       /* builder.addInterceptor(new CacheInterceptor());
-        builder.addNetworkInterceptor(new CacheInterceptor());
-        builder.cache(new Cache(MyApplication.app.getCacheDir(),10*1024*1024));*/
 
         /*创建retrofit对象*/
         Retrofit retrofit = new Retrofit.Builder()
@@ -69,9 +66,7 @@ public class HttpManager {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 /*回调线程*/
-                .observeOn(AndroidSchedulers.mainThread())
-                /*结果判断*/
-                .map(basePar);
+                .observeOn(AndroidSchedulers.mainThread());
 
         /*数据回调*/
         observable.subscribe(subscriber);

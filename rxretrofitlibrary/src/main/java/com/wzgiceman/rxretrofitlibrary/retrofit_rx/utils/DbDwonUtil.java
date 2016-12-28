@@ -8,6 +8,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DaoMaster;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DaoSession;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownInfo;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownInfoDao;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.HttpDownManager;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
