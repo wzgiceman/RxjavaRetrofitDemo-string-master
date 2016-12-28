@@ -1,5 +1,6 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 
+import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;

@@ -8,7 +8,6 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DaoMaster;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DaoSession;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownInfo;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownInfoDao;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.HttpDownManager;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -40,7 +39,7 @@ public class DbDwonUtil {
      */
     public static DbDwonUtil getInstance() {
         if (db == null) {
-            synchronized (HttpDownManager.class) {
+            synchronized (DbDwonUtil.class) {
                 if (db == null) {
                     db = new DbDwonUtil();
                 }

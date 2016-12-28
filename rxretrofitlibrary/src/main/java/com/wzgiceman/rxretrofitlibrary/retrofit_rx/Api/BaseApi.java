@@ -2,7 +2,6 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
-
 import retrofit2.Retrofit;
 import rx.Observable;
 import rx.functions.Func1;
