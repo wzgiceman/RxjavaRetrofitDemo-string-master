@@ -27,7 +27,7 @@
         11.异常统一处理
 
 ##效果
-![Preview](https://github.com/wzgiceman/RxjavaRetrofitDemo-string-master/blob/master/gif/retrofit_string.gif)
+![Preview](https://user-gold-cdn.xitu.io/2016/12/23/8f65089d9bed11a1e9f3a2722c252fcc.gif)
 
 
 ##使用
