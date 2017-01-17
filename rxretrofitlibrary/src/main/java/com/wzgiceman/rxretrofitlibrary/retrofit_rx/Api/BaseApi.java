@@ -17,7 +17,7 @@ public abstract class BaseApi {
     /*基础url*/
     private String baseUrl = "https://www.izaodao.com/Api/";
     /*方法-如果需要缓存必须设置这个参数；不需要不用設置*/
-    private String mothed="";
+    private String method="";
     /*超时时间-默认6秒*/
     private int connectionTime = 6;
     /*有网情况下的本地缓存时间默认60秒*/
@@ -50,9 +50,6 @@ public abstract class BaseApi {
         this.cookieNetWorkTime = cookieNetWorkTime;
     }
 
-    public String getMothed() {
-        return mothed;
-    }
 
     public int getConnectionTime() {
         return connectionTime;
@@ -60,10 +57,6 @@ public abstract class BaseApi {
 
     public void setConnectionTime(int connectionTime) {
         this.connectionTime = connectionTime;
-    }
-
-    public void setMothed(String mothed) {
-        this.mothed = mothed;
     }
 
     public String getBaseUrl() {
@@ -75,7 +68,7 @@ public abstract class BaseApi {
     }
 
     public String getUrl() {
-        return baseUrl + mothed;
+        return baseUrl + getMethod();
     }
 
     public boolean isCache() {
@@ -100,5 +93,13 @@ public abstract class BaseApi {
 
     public void setCancel(boolean cancel) {
         this.cancel = cancel;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 }

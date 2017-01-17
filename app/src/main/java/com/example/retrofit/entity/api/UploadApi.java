@@ -21,7 +21,7 @@ public class UploadApi extends BaseApi {
 
     public UploadApi() {
         setShowProgress(true);
-        setMothed("AppYuFaKu/uploadHeadImg");
+        setMethod("AppYuFaKu/uploadHeadImg");
         setCache(true);
     }
 

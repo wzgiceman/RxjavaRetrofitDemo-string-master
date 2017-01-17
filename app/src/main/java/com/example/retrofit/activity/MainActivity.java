@@ -108,14 +108,14 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     @Override
     public void onNext(String resulte, String mothead) {
         /*post返回处理*/
-        if (mothead.equals(postEntity.getMothed())) {
+        if (mothead.equals(postEntity.getMethod())) {
             BaseResultEntity<ArrayList<SubjectResulte>>   subjectResulte = JSONObject.parseObject(resulte, new
                     TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>(){});
             tvMsg.setText("post返回：\n" + subjectResulte.getData().toString());
         }
 
         /*上传返回处理*/
-        if (mothead.equals(uplaodApi.getMothed())) {
+        if (mothead.equals(uplaodApi.getMethod())) {
             BaseResultEntity<UploadResulte> subjectResulte = JSONObject.parseObject(resulte, new
                     TypeReference<BaseResultEntity<UploadResulte>>(){});
             UploadResulte uploadResulte = subjectResulte.getData();

@@ -116,7 +116,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                 long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
                 if (time < api.getCookieNetWorkTime()) {
                     if (mSubscriberOnNextListener.get() != null) {
-                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMothed());
+                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
                     }
                     onCompleted();
                     unsubscribe();
@@ -175,7 +175,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                 long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
                 if (time < api.getCookieNoNetWorkTime()) {
                     if (mSubscriberOnNextListener.get() != null) {
-                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMothed());
+                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
                     }
                 } else {
                     CookieDbUtil.getInstance().deleteCookie(cookieResulte);
@@ -231,7 +231,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
             }
         }
         if (mSubscriberOnNextListener.get() != null) {
-            mSubscriberOnNextListener.get().onNext((String) t, api.getMothed());
+            mSubscriberOnNextListener.get().onNext((String) t, api.getMethod());
         }
     }
 
