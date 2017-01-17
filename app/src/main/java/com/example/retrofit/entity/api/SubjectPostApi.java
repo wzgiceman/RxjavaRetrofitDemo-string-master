@@ -27,10 +27,7 @@ public class SubjectPostApi extends BaseApi {
      * 设置可查看BaseApi
      */
     public SubjectPostApi() {
-        setShowProgress(true);
-        setCancel(true);
-        setCache(true);
-        setMothed("AppFiftyToneGraph/videoLink");
+//        setMothed("AppFiftyToneGraph/videoLink");
     }
 
 
