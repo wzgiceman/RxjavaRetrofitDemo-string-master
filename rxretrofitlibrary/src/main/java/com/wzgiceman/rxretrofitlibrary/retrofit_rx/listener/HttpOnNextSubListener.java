@@ -9,5 +9,10 @@ import rx.Observable;
 
 public interface HttpOnNextSubListener {
 
-    void onNext(Observable observable);
+    /**
+     * ober成功回调
+     * @param observable
+     * @param method
+     */
+    void onNext(Observable observable,String method);
 }

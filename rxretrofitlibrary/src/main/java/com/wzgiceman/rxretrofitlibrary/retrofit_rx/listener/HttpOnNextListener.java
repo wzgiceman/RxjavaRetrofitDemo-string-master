@@ -10,9 +10,9 @@ public interface  HttpOnNextListener {
     /**
      * 成功后回调方法
      * @param resulte
-     * @param mothead
+     * @param method
      */
-   void onNext(String resulte,String mothead);
+   void onNext(String resulte,String method);
 
     /**
      * 失败

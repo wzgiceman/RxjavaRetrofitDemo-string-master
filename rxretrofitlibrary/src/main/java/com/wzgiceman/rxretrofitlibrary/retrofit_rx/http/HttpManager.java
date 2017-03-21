@@ -77,7 +77,7 @@ public class HttpManager {
 
         /*ober回调，链接式返回*/
         if(null!=onNextSubListener.get()){
-                onNextSubListener.get().onNext(observable);
+                onNextSubListener.get().onNext(observable,basePar.getMethod());
         }
 
         /*数据String回调*/
