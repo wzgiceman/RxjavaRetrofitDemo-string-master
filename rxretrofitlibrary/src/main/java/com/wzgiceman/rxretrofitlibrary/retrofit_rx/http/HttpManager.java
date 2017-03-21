@@ -6,6 +6,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressSubscriber;
 
 import java.lang.ref.SoftReference;
@@ -27,12 +28,19 @@ import rx.schedulers.Schedulers;
 public class HttpManager {
     /*软引用對象*/
     private SoftReference<HttpOnNextListener> onNextListener;
+    private SoftReference<HttpOnNextSubListener> onNextSubListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
 
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
         this.onNextListener = new SoftReference(onNextListener);
         this.appCompatActivity = new SoftReference(appCompatActivity);
     }
+
+    public HttpManager(HttpOnNextSubListener onNextSubListener, RxAppCompatActivity appCompatActivity) {
+        this.onNextSubListener = new SoftReference(onNextSubListener);
+        this.appCompatActivity = new SoftReference(appCompatActivity);
+    }
+
 
     /**
      * 处理http请求
@@ -51,8 +59,7 @@ public class HttpManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(basePar.getBaseUrl())
                 .build();
-        /*rx处理*/
-        ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
+
         Observable observable = basePar.getObservable(retrofit)
                 /*失败后的retry配置*/
                 .retryWhen(new RetryWhenNetworkException())
@@ -68,8 +75,17 @@ public class HttpManager {
                 /*回调线程*/
                 .observeOn(AndroidSchedulers.mainThread());
 
-        /*数据回调*/
-        observable.subscribe(subscriber);
+        /*ober回调，链接式返回*/
+        if(null!=onNextSubListener.get()){
+                onNextSubListener.get().onNext(observable);
+        }
+
+        /*数据String回调*/
+        if (null!=onNextListener.get()) {
+            ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
+            observable.subscribe(subscriber);
+        }
+
     }
 
 
@@ -82,5 +98,8 @@ public class HttpManager {
             return Observable.error(FactoryException.analysisExcetpion(throwable));
         }
     };
+
+
+
 
 }
