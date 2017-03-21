@@ -20,7 +20,6 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.ApiException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpManager;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.ProgressRequestBody;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload.UploadProgressListener;
 
@@ -30,9 +29,8 @@ import java.util.ArrayList;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import rx.Observable;
 
-public class MainActivity extends RxAppCompatActivity implements View.OnClickListener, HttpOnNextListener, HttpOnNextSubListener {
+public class MainActivity extends RxAppCompatActivity implements View.OnClickListener, HttpOnNextListener {
     private TextView tvMsg;
     private NumberProgressBar progressBar;
     private ImageView img;
@@ -95,15 +93,6 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
         }
     }
 
-    //    完美封装简化版
-    private void simpleDo() {
-         /*初始化数据*/
-        manager = new HttpManager(this, this);
-        postEntity = new SubjectPostApi();
-        postEntity.setAll(true);
-        manager.doHttpDeal(postEntity);
-    }
-
 
     @Override
     public void onNext(String resulte, String mothead) {
@@ -127,12 +116,6 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     @Override
     public void onError(ApiException e) {
         tvMsg.setText("失败：\ncode=" + e.getCode() + "\nmsg:" + e.getDisplayMessage());
-    }
-
-
-    @Override
-    public void onNext(Observable observable) {
-
     }
 
 }

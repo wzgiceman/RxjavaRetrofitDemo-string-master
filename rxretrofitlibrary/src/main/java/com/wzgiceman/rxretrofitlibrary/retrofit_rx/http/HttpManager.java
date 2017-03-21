@@ -47,13 +47,13 @@ public class HttpManager {
      *
      * @param basePar 封装的请求数据
      */
-    public void doHttpDeal(BaseApi basePar) {
+    public void doHttpDeal(final BaseApi basePar) {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
 
         /*创建retrofit对象*/
-        Retrofit retrofit = new Retrofit.Builder()
+        final Retrofit retrofit = new Retrofit.Builder()
                 .client(builder.build())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -76,12 +76,12 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread());
 
         /*ober回调，链接式返回*/
-        if(null!=onNextSubListener.get()){
-                onNextSubListener.get().onNext(observable,basePar.getMethod());
+        if (onNextSubListener!=null&&null != onNextSubListener.get()) {
+            onNextSubListener.get().onNext(observable, basePar.getMethod());
         }
 
         /*数据String回调*/
-        if (null!=onNextListener.get()) {
+        if (onNextListener!=null&&null != onNextListener.get()) {
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
             observable.subscribe(subscriber);
         }
@@ -98,8 +98,4 @@ public class HttpManager {
             return Observable.error(FactoryException.analysisExcetpion(throwable));
         }
     };
-
-
-
-
 }

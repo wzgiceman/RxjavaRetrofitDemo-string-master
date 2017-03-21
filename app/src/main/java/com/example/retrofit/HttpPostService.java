@@ -15,8 +15,4 @@ public interface HttpPostService {
     @GET("AppFiftyToneGraph/videoLink/{once_no}")
     Observable<String> getAllVedioBy(@Query("once_no") boolean once_no);
 
-//    @FormUrlEncoded
-    //    @POST("AppFiftyToneGraph/videoLink")
-//    Observable<String> getAllVedioBy(@Field("once_no") boolean once_no);
-
 }
