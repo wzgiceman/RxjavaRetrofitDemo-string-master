@@ -3,8 +3,9 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.FactoryException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.func.ExceptionFunc;
+import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.func.ResulteFunc;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers.ProgressSubscriber;
@@ -18,7 +19,6 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -64,11 +64,13 @@ public class HttpManager {
                 /*失败后的retry配置*/
                 .retryWhen(new RetryWhenNetworkException())
                 /*异常处理*/
-                .onErrorResumeNext(funcException)
+                .onErrorResumeNext(new ExceptionFunc())
                 /*生命周期管理*/
                 //.compose(appCompatActivity.get().bindToLifecycle())
                 //Note:手动设置在activity onDestroy的时候取消订阅
                 .compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY))
+                /*返回数据统一判断*/
+                .map(new ResulteFunc())
                 /*http请求线程*/
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -76,26 +78,16 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread());
 
         /*ober回调，链接式返回*/
-        if (onNextSubListener!=null&&null != onNextSubListener.get()) {
+        if (onNextSubListener != null && null != onNextSubListener.get()) {
             onNextSubListener.get().onNext(observable, basePar.getMethod());
         }
 
         /*数据String回调*/
-        if (onNextListener!=null&&null != onNextListener.get()) {
+        if (onNextListener != null && null != onNextListener.get()) {
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
             observable.subscribe(subscriber);
         }
 
     }
 
-
-    /**
-     * 异常处理
-     */
-    Func1 funcException = new Func1<Throwable, Observable>() {
-        @Override
-        public Observable call(Throwable throwable) {
-            return Observable.error(FactoryException.analysisExcetpion(throwable));
-        }
-    };
 }
