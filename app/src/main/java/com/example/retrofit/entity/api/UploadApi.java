@@ -22,7 +22,7 @@ public class UploadApi extends BaseApi {
     public UploadApi() {
         setShowProgress(true);
         setMethod("AppYuFaKu/uploadHeadImg");
-        setCache(true);
+        setCache(false);
     }
 
     public MultipartBody.Part getPart() {
@@ -32,6 +32,7 @@ public class UploadApi extends BaseApi {
     public void setPart(MultipartBody.Part part) {
         this.part = part;
     }
+
 
     @Override
     public Observable getObservable(Retrofit retrofit) {

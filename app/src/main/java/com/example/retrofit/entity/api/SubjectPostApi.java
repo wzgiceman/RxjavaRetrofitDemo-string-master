@@ -22,7 +22,7 @@ public class SubjectPostApi extends BaseApi {
 
 
     /**
-     * 默认初始化需要给定回调和rx周期类
+     * 默认初始化需要给定初始设置
      * 可以额外设置请求设置加载框显示，回调等（可扩展）
      * 设置可查看BaseApi
      */
