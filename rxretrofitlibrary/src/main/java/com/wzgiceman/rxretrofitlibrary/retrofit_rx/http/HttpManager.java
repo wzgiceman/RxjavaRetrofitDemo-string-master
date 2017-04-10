@@ -1,5 +1,7 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 
+import android.util.Log;
+
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
@@ -14,6 +16,7 @@ import java.lang.ref.SoftReference;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -51,6 +54,7 @@ public class HttpManager {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
+        builder.addInterceptor(getHttpLoggingInterceptor());
 
         /*创建retrofit对象*/
         final Retrofit retrofit = new Retrofit.Builder()
@@ -89,6 +93,25 @@ public class HttpManager {
             observable.subscribe(subscriber);
         }
 
+    }
+
+    /**
+     * 日志输出
+     * 自行判定是否添加
+     * @return
+     */
+    private HttpLoggingInterceptor getHttpLoggingInterceptor(){
+        //日志显示级别
+        HttpLoggingInterceptor.Level level= HttpLoggingInterceptor.Level.BODY;
+        //新建log拦截器
+        HttpLoggingInterceptor loggingInterceptor=new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Log.d("RxRetrofit","Retrofit====Message:"+message);
+            }
+        });
+        loggingInterceptor.setLevel(level);
+        return loggingInterceptor;
     }
 
 }
