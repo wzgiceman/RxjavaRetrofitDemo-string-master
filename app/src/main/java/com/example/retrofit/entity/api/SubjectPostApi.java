@@ -27,6 +27,7 @@ public class SubjectPostApi extends BaseApi {
      * 设置可查看BaseApi
      */
     public SubjectPostApi() {
+        setCache(false);
         setMethod("AppFiftyToneGraph/videoLink");
     }
 

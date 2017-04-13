@@ -52,10 +52,23 @@ public class HttpManager {
      * @param basePar 封装的请求数据
      */
     public void doHttpDeal(final BaseApi basePar) {
+        Retrofit retrofit = getReTrofit(basePar.getConnectionTime(), basePar.getBaseUrl());
+        httpDeal(basePar.getObservable(retrofit), basePar);
+    }
+
+
+    /**
+     * 获取Retrofit对象
+     *
+     * @param connectTime
+     * @param baseUrl
+     * @return
+     */
+    public Retrofit getReTrofit(int connectTime, String baseUrl) {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
-        if(RxRetrofitApp.isDebug()){
+        builder.connectTimeout(connectTime, TimeUnit.SECONDS);
+        if (RxRetrofitApp.isDebug()) {
             builder.addInterceptor(getHttpLoggingInterceptor());
         }
 
@@ -64,13 +77,21 @@ public class HttpManager {
                 .client(builder.build())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(basePar.getBaseUrl())
+                .baseUrl(baseUrl)
                 .build();
+        return retrofit;
+    }
 
-        Observable observable = basePar.getObservable(retrofit)
-                /*失败后的retry配置*/
-                .retryWhen(new RetryWhenNetworkException(basePar.getRetryCount(),
-                        basePar.getRetryDelay(), basePar.getRetryIncreaseDelay()))
+    /**
+     * RxRetrofit处理
+     *
+     * @param observable
+     * @param basePar
+     */
+    public void httpDeal(Observable observable, BaseApi basePar) {
+          /*失败后的retry配置*/
+        observable = observable.retryWhen(new RetryWhenNetworkException(basePar.getRetryCount(),
+                basePar.getRetryDelay(), basePar.getRetryIncreaseDelay()))
                 /*异常处理*/
                 .onErrorResumeNext(new ExceptionFunc())
                 /*生命周期管理*/
@@ -95,7 +116,6 @@ public class HttpManager {
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
             observable.subscribe(subscriber);
         }
-
     }
 
     /**

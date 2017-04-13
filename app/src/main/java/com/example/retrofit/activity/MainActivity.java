@@ -47,11 +47,11 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_main);
         tvMsg = (TextView) findViewById(R.id.tv_msg);
         findViewById(R.id.btn_rx).setOnClickListener(this);
+        findViewById(R.id.btn_rx_all).setOnClickListener(this);
         findViewById(R.id.btn_rx_mu_down).setOnClickListener(this);
         findViewById(R.id.btn_rx_uploade).setOnClickListener(this);
         img = (ImageView) findViewById(R.id.img);
         progressBar = (NumberProgressBar) findViewById(R.id.number_progress_bar);
-
 
         /*初始化数据*/
         manager = new HttpManager(this, this);
@@ -80,6 +80,10 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_rx_all:
+                Intent intentC = new Intent(this, CombinApiActivity.class);
+                startActivity(intentC);
+                break;
             case R.id.btn_rx:
                 manager.doHttpDeal(postEntity);
                 break;
@@ -96,6 +100,7 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
 
     @Override
     public void onNext(String resulte, String mothead) {
+
         /*post返回处理*/
         if (mothead.equals(postEntity.getMethod())) {
             BaseResultEntity<ArrayList<SubjectResulte>>   subjectResulte = JSONObject.parseObject(resulte, new

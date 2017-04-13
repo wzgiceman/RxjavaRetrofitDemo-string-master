@@ -4,7 +4,6 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.widget.Toast;
 
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.RxRetrofitApp;
@@ -204,8 +203,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         } else {
             httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, e.getMessage()));
         }
-        /*可以在这里统一处理错误处理-可自由扩展*/
-        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 

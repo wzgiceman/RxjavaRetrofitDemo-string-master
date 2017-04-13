@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
+    <Button
+        android:id="@+id/btn_rx_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rx+retrofit：统一api方案"/>
+
+
     <Button
         android:id="@+id/btn_rx"
         android:layout_width="match_parent"
