@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+ <HEAD>
+  <TITLE> 读取</TITLE>
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+<META http-equiv="Content-Type" content="text/html; charset=gbk" />
+  <script type='text/javascript' charset='gb2312'>
+    loadXML = function(xmlString){
+        var xmlDoc=null;
+        if(!window.DOMParser && window.ActiveXObject){   //window.DOMParser  
+            var xmlDomVersions = ['MSXML.2.DOMDocument.6.0','MSXML.2.DOMDocument.3.0','Microsoft.XMLDOM'];
+            for(var i=0;i<xmlDomVersions.length;i++){
+                try{
+                    xmlDoc = new ActiveXObject(xmlDomVersions[i]);
+                    xmlDoc.async = false;
+                    xmlDoc.loadXML(xmlString); //loadXML 
+                    break;
+                }catch(e){
+                }
+            }
+        } 
+        else if(window.DOMParser && document.implementation && document.implementation.createDocument){
+            try{
+                
+                domParser = new  DOMParser();
+                xmlDoc = domParser.parseFromString(xmlString, 'text/xml');
+            }catch(e){
+            }
+        }
+        else{
+            return null;
+        }
+
+        return xmlDoc;
+    }
+ 
+    checkXMLDocObj = function(xmlString){
+        var xmlDoc = loadXML(xmlString);
+        if(xmlDoc==null){
+            alert('只支持IE5.0以上浏览器'); 
+        }
+        return xmlDoc;
+    }
+    
+    // 
+    initializeSelect = function(){ 
+		var oShow1 = document.getElementById("show1"); 
+		var oShow2 = document.getElementById("show2"); 
+		var oShow3 = document.getElementById("show3"); 
+		document.getElementById("show4").value = "";;
+		document.getElementById("show5").value = "";
+		 oShow1.value = "";
+		 oShow2.value = "";
+		 oShow3.value = "";
+        var xmlstr= document.getElementById("text1").value;   
+        var xmlDoc = checkXMLDocObj(xmlstr); 
+		title = document.getElementById("title").value; 
+		mainView = document.getElementById("mainView").value; 
+		default_name = document.getElementById("default_name").value; 
+		default_id = document.getElementById("default_id").value; 
+		default_event = document.getElementById("default_event").value; 
+		checkbox = document.getElementById("checkbox").checked; 
+		/*if(xmlDoc)   
+		{
+		   var Companys= xmlDoc.getElementsByTagName('RelativeLayout'); 
+			
+		   if(Companys)
+		   {
+		   
+				myValue = "";
+				for(var i=0;i<Companys.length;i++)
+				{
+					var cNname = Companys[i].getElementsByTagName('RelativeLayout'); // 
+					//var cIP = Companys[i].getElementsByTagName('LinearLayout')[0].innerHTML;// 
+					//var year = Companys[i].getElementsByTagName('year')[0].innerHTML; // 
+					//var price = Number(Companys[i].getElementsByTagName('price')[0].innerHTML);
+					  
+				  //  
+				  myValue += "<br\>";
+				    myValue += cNname;
+				  // myValue += "<br\>";
+				 //  myValue += cIP;
+				   var attrs = Companys[i].attributes;
+					
+				   for(var j=0;j<attrs.length;j++)
+				   {
+					   var attr = attrs[j];
+					   var attr_name = attr.name;
+						myValue += "<br\>";
+					   myValue += attr_name;
+					   var attr_value =  attr.value; 
+						myValue += "<br\>";
+					   myValue += attr_value;         
+				   }   
+				}
+				 
+			   
+			oShow1.innerHTML = "数据："+Companys.length+"：："+ myValue+""; 
+		   }
+		}*/
+		//var nodes=xmlDoc.documentElement.childNodes; 
+				getNotes(xmlDoc.documentElement); 
+		/*for(var i=0;i<nodes.length;i++){  
+			if(nodes[i].nodeName != "#text" )
+				getNotes(nodes[i]);
+			var attrs = nodes[i].attributes;
+			if(attrs != null){
+				for(var k=0;k<attrs.length;k++)
+				{
+					var attr = attrs[k];
+					var attr_name = attr.name;
+						//	mdata += "<br\>";
+						//	mdata += attr_name;
+					if(attr_name == "android:id" ){
+						var attr_value =  attr.value; 
+						mdata += "<br\>";
+						mdata += attr_value;         
+					}
+				}   
+			}
+			
+			var ll = nodes[i].childNodes.length; 
+			if(ll != 0){
+				for(var j=0;j<ll;j++)
+					var attrs = nodes[i].childNodes[j].attributes;
+					if(attrs != null){
+						for(var k=0;k<attrs.length;k++)
+						{
+							var attr = attrs[k];
+							var attr_name = attr.name;
+							mdata += "<br\>";
+							mdata += attr_name;
+							var attr_value =  attr.value; 
+							mdata += "<br\>";
+							mdata += attr_value;         
+						}   
+				   }
+			 }
+			 
+		} */
+			   
+			 //oShow1.innerHTML = "数据："+mdata2; 
+		// oShow2.innerHTML = "数据："+nodes.length+"：："+mdata;
+		
+    }
+	getNotes = function(nnn){
+			var ch = nnn.childNodes;  
+			if(ch != null &&  ch.length != 0){
+				writeNotesName(nnn);
+				for(var j=0;j<ch.length;j++){ 
+					if(ch[j].nodeName != "#text" ){
+						getNotes(ch[j]);
+					}
+				}
+			 }else{
+				writeNotesName(nnn);
+			 }
+			 
+	}
+	writeNotesName = function(nnn){
+		var oShow1 = document.getElementById("show1"); 
+		var oShow2 = document.getElementById("show2"); 
+		var oShow3 = document.getElementById("show3");  
+		var oShow4 = document.getElementById("show4");
+		var oShow5 = document.getElementById("show5");
+		var data3 = "-1";
+		
+		var data = "-1";
+		data = nnn.nodeName; 
+		
+		var mdata = "-1";
+		var attrs = nnn.attributes; 
+		if(attrs != null){
+			for(var k=0;k<attrs.length;k++)
+			{	
+				var attr = attrs[k];
+				var attr_name = attr.name;
+				if(attr_name == "android:id" ){
+					var attr_value =  attr.value; 
+					mdata = attr_value;  								
+				}
+			}   
+		} 
+		
+		 
+		if(mdata != "-1" && data != "-1" && data != null){
+			mdata = mdata.replace("@+id/","");
+			var name = getViewName(mdata);
+			
+			oShow1.value = oShow1.value + "\n" +title+" "+data+" "+default_name+name+";";
+			
+			data3= "\n" +default_id.replace("?",mdata)+"\n"+title+" "+data+" "+default_name+name+";"
+			
+			if(mainView != "" && mainView != undefined && mainView != null && mainView.indexOf(".") == -1)
+				mainView = mainView+".";
+		 
+			oShow2.value = oShow2.value + "\n" +" "+default_name+name+" = ("+data+") "+mainView+"findViewById(R.id."+mdata+");";
+			oShow3.value = oShow3.value + data3;
+			oShow4.value = oShow4.value + "\n"  + default_event.replace("?",mdata)+"\nvoid on"+name+"Click(View view) {}";
+			var idCick = oShow5.value;
+			if(idCick.indexOf("}") != -1){
+				var nn1 = idCick.substring(0,idCick.indexOf("}")); 
+				oShow5.value = nn1 + "\n"  + "case R.id."+mdata+":\n  break;\n}";
+			}else
+				oShow5.value = oShow5.value + "switch (view.getId()) {\n"  + "case R.id."+mdata+":\n  break;}";
+		}			
+	}
+	getViewName = function(name){
+			var a;
+			if(checkbox){
+				a = name.substring(0,1);
+				a = a.toUpperCase( );
+				name = name.substring(1,name.length);
+				name = a + name;
+			}
+			while(name.indexOf("_") != -1){
+				var index = name.indexOf("_");
+				var nn1 = name.substring(0,index);
+				var nn2 = name.substring(index+1,name.length);
+				a = nn2.substring(0,1);
+				a = a.toUpperCase( );
+				nn2 = nn2.substring(1,name.length);
+				nn2 = a + nn2;
+				name = nn1+nn2;
+			}
+			return name;
+	}
+	
+	var title = "";
+	var mainView = "this";
+	var default_name = "m";
+	var default_id = "@BindView  (R.id.?)";
+	var default_event = "@OnClick(value = R.id.?)";
+	var checkbox = true;
+	
+	clearData = function(){
+		var oShow1 = document.getElementById("show1"); 
+		var oShow2 = document.getElementById("show2"); 
+		var oShow3 = document.getElementById("show3");  
+		document.getElementById("show4").value = "";
+		document.getElementById("show5").value = "";
+
+		var text = document.getElementById("text1");
+		title = "";
+		mainView = "this";
+		default_name = "m";
+		default_id = "@BindView  (R.id.?)";
+		default_event = "@OnClick(value = R.id.?)";
+		
+		text.value = "";
+		oShow1.value = "";
+		oShow2.value = "";
+		oShow3.value = "";
+		document.getElementById("title").value = title;
+		document.getElementById("mainView").value = mainView;
+		document.getElementById("default_name").value = default_name;
+		document.getElementById("default_id").value = default_id;
+		document.getElementById("default_event").value = default_event;
+		document.getElementById("checkbox").checked = true;
+		
+	}
+  </script>
+ </HEAD>
+
+ <body >
+ <div>
+ 名字前缀 <input id="default_name" value="m"></input><br\>
+ title <input id="title" value=""></input><br\>
+ mainView <input id="mainView" value="this"></input><br\>
+ 注入变量模板 <input id="default_id" value="@BindView  (R.id.?)"></input><br\>
+ 注入事件模板 <input id="default_event" value="@OnClick(value = R.id.?)"></input><br\>
+ <input id="checkbox" type="checkbox" checked="true">首字母大写</input>
+  <button onclick="initializeSelect()">读取</button><br\>
+  <button onclick="clearData()">还原</button><br\>
+  
+  </div>
+   
+   <textarea  id="text1"   style="height:30%;width:40%"></textarea>
+  <textarea    id="show5"   style="height:30%;width:40%"></textarea>
+   
+  <textarea    id="show1"  style="height:30%;width:40%"></textarea> 
+  
+  <textarea    id="show2"   style="height:30%;width:40%"></textarea>
+  
+  <textarea    id="show3"   style="height:30%;width:40%"></textarea>
+  <textarea    id="show4"   style="height:30%;width:40%"></textarea>
+ </body>
+ </body>
+</HTML>
+       
