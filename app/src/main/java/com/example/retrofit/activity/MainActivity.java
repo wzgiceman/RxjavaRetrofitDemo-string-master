@@ -67,23 +67,23 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
         File file = new File("/storage/emulated/0/Download/11.jpg");
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file_name", file.getName(), new ProgressRequestBody
-                (requestBody,
-                        new UploadProgressListener() {
+                (requestBody, new UploadProgressListener() {
+                    @Override
+                    public void onProgress(final long currentBytesCount, final long totalBytesCount) {
+
+                        /*回到主线程中，可通过timer等延迟或者循环避免快速刷新数据*/
+                        Observable.just(currentBytesCount).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+
                             @Override
-                            public void onProgress(final long currentBytesCount, final long totalBytesCount) {
-
-                                Observable.just(currentBytesCount).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
-
-                                    @Override
-                                    public void call(Long aLong) {
-                                        tvMsg.setText("提示:上传中");
-                                        progressBar.setMax((int) totalBytesCount);
-                                        progressBar.setProgress((int) currentBytesCount);
-                                    }
-                                });
-
+                            public void call(Long aLong) {
+                                tvMsg.setText("提示:上传中");
+                                progressBar.setMax((int) totalBytesCount);
+                                progressBar.setProgress((int) currentBytesCount);
                             }
-                        }));
+                        });
+
+                    }
+                }));
         uplaodApi.setPart(part);
     }
 
@@ -114,15 +114,17 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
 
         /*post返回处理*/
         if (mothead.equals(postEntity.getMethod())) {
-            BaseResultEntity<ArrayList<SubjectResulte>>   subjectResulte = JSONObject.parseObject(resulte, new
-                    TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>(){});
+            BaseResultEntity<ArrayList<SubjectResulte>> subjectResulte = JSONObject.parseObject(resulte, new
+                    TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>() {
+                    });
             tvMsg.setText("post返回：\n" + subjectResulte.getData().toString());
         }
 
         /*上传返回处理*/
         if (mothead.equals(uplaodApi.getMethod())) {
             BaseResultEntity<UploadResulte> subjectResulte = JSONObject.parseObject(resulte, new
-                    TypeReference<BaseResultEntity<UploadResulte>>(){});
+                    TypeReference<BaseResultEntity<UploadResulte>>() {
+                    });
             UploadResulte uploadResulte = subjectResulte.getData();
             tvMsg.setText("上传成功返回：\n" + uploadResulte.getHeadImgUrl());
             Glide.with(MainActivity.this).load(uploadResulte.getHeadImgUrl()).skipMemoryCache(true).into(img);
