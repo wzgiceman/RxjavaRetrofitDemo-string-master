@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class MainActivity extends RxAppCompatActivity implements View.OnClickListener, HttpOnNextListener {
     private TextView tvMsg;
@@ -67,10 +70,18 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
                 (requestBody,
                         new UploadProgressListener() {
                             @Override
-                            public void onProgress(long currentBytesCount, long totalBytesCount) {
-                                tvMsg.setText("提示:上传中");
-                                progressBar.setMax((int) totalBytesCount);
-                                progressBar.setProgress((int) currentBytesCount);
+                            public void onProgress(final long currentBytesCount, final long totalBytesCount) {
+
+                                Observable.just(currentBytesCount).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+
+                                    @Override
+                                    public void call(Long aLong) {
+                                        tvMsg.setText("提示:上传中");
+                                        progressBar.setMax((int) totalBytesCount);
+                                        progressBar.setProgress((int) currentBytesCount);
+                                    }
+                                });
+
                             }
                         }));
         uplaodApi.setPart(part);

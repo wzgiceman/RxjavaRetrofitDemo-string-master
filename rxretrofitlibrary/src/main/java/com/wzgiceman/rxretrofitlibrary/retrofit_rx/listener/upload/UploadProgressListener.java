@@ -8,6 +8,7 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.upload;
 public interface UploadProgressListener {
     /**
      * 上传进度
+     * 手动回调到主线程中
      * @param currentBytesCount
      * @param totalBytesCount
      */
