@@ -77,7 +77,7 @@ public abstract class BaseApi {
 
     public String getUrl() {
         /*在没有手动设置url情况下，简单拼接*/
-        if (null == cacheUrl || "".equals(cacheUrl)) {
+        if (null == getCacheUrl() || "".equals(getCacheUrl())) {
             return getBaseUrl() + getMethod();
         }
         return getCacheUrl();
