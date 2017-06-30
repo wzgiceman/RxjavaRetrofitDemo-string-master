@@ -17,7 +17,7 @@ public abstract class BaseApi {
     /*基础url*/
     private String baseUrl = "https://www.izaodao.com/Api/";
     /*方法-如果需要缓存必须设置这个参数；不需要不用設置*/
-    private String method="";
+    private String method = "";
     /*超时时间-默认6秒*/
     private int connectionTime = 6;
     /*有网情况下的本地缓存时间默认60秒*/
@@ -30,6 +30,8 @@ public abstract class BaseApi {
     private long retryDelay = 100;
     /*retry叠加延迟*/
     private long retryIncreaseDelay = 100;
+    /*缓存url-可手动设置*/
+    private String cacheUrl;
 
     /**
      * 设置参数
@@ -38,7 +40,6 @@ public abstract class BaseApi {
      * @return
      */
     public abstract Observable getObservable(Retrofit retrofit);
-
 
 
     public int getCookieNoNetWorkTime() {
@@ -75,7 +76,11 @@ public abstract class BaseApi {
     }
 
     public String getUrl() {
-        return baseUrl + getMethod();
+        /*在没有手动设置url情况下，简单拼接*/
+        if (null == cacheUrl || "".equals(cacheUrl)) {
+            return getBaseUrl() + getMethod();
+        }
+        return getCacheUrl();
     }
 
     public boolean isCache() {
@@ -132,5 +137,13 @@ public abstract class BaseApi {
 
     public void setRetryIncreaseDelay(long retryIncreaseDelay) {
         this.retryIncreaseDelay = retryIncreaseDelay;
+    }
+
+    public String getCacheUrl() {
+        return cacheUrl;
+    }
+
+    public void setCacheUrl(String cacheUrl) {
+        this.cacheUrl = cacheUrl;
     }
 }
