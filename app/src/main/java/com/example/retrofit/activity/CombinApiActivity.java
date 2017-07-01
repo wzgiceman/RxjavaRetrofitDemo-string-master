@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author wzg
  */
-public class CombinApiActivity extends RxAppCompatActivity implements HttpOnNextListener{
+public class CombinApiActivity extends RxAppCompatActivity implements HttpOnNextListener {
     private TextView tvMsg;
     CombinApi api;
 
@@ -31,7 +31,7 @@ public class CombinApiActivity extends RxAppCompatActivity implements HttpOnNext
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combin_api);
 
-        api=new CombinApi(this,this);
+        api = new CombinApi(this, this);
         tvMsg = (TextView) findViewById(R.id.tv_msg);
         findViewById(R.id.btn_rx_all).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,12 +50,13 @@ public class CombinApiActivity extends RxAppCompatActivity implements HttpOnNext
     @Override
     public void onNext(String resulte, String method) {
         BaseResultEntity<ArrayList<SubjectResulte>> subjectResulte = JSONObject.parseObject(resulte, new
-                TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>(){});
+                TypeReference<BaseResultEntity<ArrayList<SubjectResulte>>>() {
+                });
         tvMsg.setText("统一post返回：\n" + subjectResulte.getData().toString());
     }
 
     @Override
-    public void onError(ApiException e) {
-        tvMsg.setText("失败：\ncode=" + e.getCode() + "\nmsg:" + e.getDisplayMessage());
+    public void onError(ApiException e, String method) {
+        tvMsg.setText("失败："+method+"\ncode=" + e.getCode() + "\nmsg:" + e.getDisplayMessage());
     }
 }

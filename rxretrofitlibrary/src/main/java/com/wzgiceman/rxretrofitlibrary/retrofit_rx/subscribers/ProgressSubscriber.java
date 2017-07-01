@@ -196,12 +196,12 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         HttpOnNextListener httpOnNextListener = mSubscriberOnNextListener.get();
         if (httpOnNextListener == null) return;
         if (e instanceof ApiException) {
-            httpOnNextListener.onError((ApiException) e);
+            httpOnNextListener.onError((ApiException) e,api.getMethod());
         } else if (e instanceof HttpTimeException) {
             HttpTimeException exception = (HttpTimeException) e;
-            httpOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage()));
+            httpOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage()),api.getMethod());
         } else {
-            httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, e.getMessage()));
+            httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, e.getMessage()),api.getMethod());
         }
     }
 

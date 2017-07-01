@@ -132,8 +132,8 @@ public class MainActivity extends RxAppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onError(ApiException e) {
-        tvMsg.setText("失败：\ncode=" + e.getCode() + "\nmsg:" + e.getDisplayMessage());
+    public void onError(ApiException e, String method) {
+        tvMsg.setText("失败："+method+"\ncode=" + e.getCode() + "\nmsg:" + e.getDisplayMessage());
     }
 
 }
