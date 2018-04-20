@@ -1,9 +1,9 @@
 package com.example.retrofit.activity.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.retrofit.R;
@@ -18,7 +18,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpDownOnNextListen
  * Created by WZG on 2016/10/21.
  */
 
-public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClickListener{
+public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClickListener {
     private TextView tvMsg;
     private NumberProgressBar progressBar;
     private DownInfo apkApi;
@@ -26,22 +26,22 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
 
     public DownHolder(ViewGroup parent) {
         super(parent, R.layout.view_item_holder);
-        manager= HttpDownManager.getInstance();
+        manager = HttpDownManager.getInstance();
         $(R.id.btn_rx_down).setOnClickListener(this);
         $(R.id.btn_rx_pause).setOnClickListener(this);
-        progressBar=$(R.id.number_progress_bar);
-        tvMsg=$(R.id.tv_msg);
+        progressBar = $(R.id.number_progress_bar);
+        tvMsg = $(R.id.tv_msg);
     }
 
     @Override
     public void setData(DownInfo data) {
         super.setData(data);
         data.setListener(httpProgressOnNextListener);
-        apkApi=data;
+        apkApi = data;
         progressBar.setMax((int) apkApi.getCountLength());
         progressBar.setProgress((int) apkApi.getReadLength());
         /*第一次恢复 */
-        switch (apkApi.getState()){
+        switch (apkApi.getState()) {
             case START:
                 /*起始状态*/
                 break;
@@ -57,7 +57,7 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
             case ERROR:
                 tvMsg.setText("下載錯誤");
                 break;
-            case  FINISH:
+            case FINISH:
                 tvMsg.setText("下载完成");
                 break;
         }
@@ -68,7 +68,7 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_rx_down:
-                if(apkApi.getState()!= DownState.FINISH){
+                if (apkApi.getState() != DownState.FINISH) {
                     manager.startDown(apkApi);
                 }
                 break;
@@ -79,11 +79,10 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
     }
 
     /*下载回调*/
-    HttpDownOnNextListener<DownInfo> httpProgressOnNextListener=new HttpDownOnNextListener<DownInfo>() {
+    HttpDownOnNextListener<DownInfo> httpProgressOnNextListener = new HttpDownOnNextListener<DownInfo>() {
         @Override
         public void onNext(DownInfo baseDownEntity) {
-            tvMsg.setText("提示：下载完成");
-            Toast.makeText(getContext(),baseDownEntity.getSavePath(),Toast.LENGTH_SHORT).show();
+            tvMsg.setText("提示：下载完成->" + baseDownEntity.getSavePath());
         }
 
         @Override
@@ -93,13 +92,12 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
 
         @Override
         public void onComplete() {
-            tvMsg.setText("提示：下载结束");
         }
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            tvMsg.setText("失败:"+e.toString());
+            tvMsg.setText("失败:" + e.toString());
         }
 
 
@@ -116,6 +114,7 @@ public class DownHolder extends BaseViewHolder<DownInfo> implements View.OnClick
 
         @Override
         public void updateProgress(long readLength, long countLength) {
+            Log.e("tag", countLength + "--->" + readLength);
             tvMsg.setText("提示:下载中");
             progressBar.setMax((int) countLength);
             progressBar.setProgress((int) readLength);

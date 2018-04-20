@@ -9,11 +9,11 @@ import rx.functions.Func1;
  * Created by WZG on 2017/3/23.
  */
 
-public class ResulteFunc implements Func1<Object,Object>{
+public class ResulteFunc implements Func1<Object, Object> {
     @Override
     public Object call(Object o) {
         if (o == null || "".equals(o.toString())) {
-            throw new HttpTimeException("数据错误");
+            throw new HttpTimeException(HttpTimeException.CHACHE_HTTP_POST_ERROR, "数据错误");
         }
         return o;
     }

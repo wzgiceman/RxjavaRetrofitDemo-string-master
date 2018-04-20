@@ -7,38 +7,48 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception;
  */
 public class HttpTimeException extends RuntimeException {
     /*未知错误*/
-    public static final int UNKOWN_ERROR = 0x1002;
+    public static final int UNKNOWN_ERROR = 0x1002;
     /*本地无缓存错误*/
     public static final int NO_CHACHE_ERROR = 0x1003;
     /*缓存过时错误*/
     public static final int CHACHE_TIMEOUT_ERROR = 0x1004;
-
-
-    public HttpTimeException(int resultCode) {
-        super(getApiExceptionMessage(resultCode));
-    }
-
-    public HttpTimeException(String detailMessage) {
-        super(detailMessage);
-    }
+    /*断点下载错误*/
+    public static final int CHACHE_DOWN_ERROR = 0x1005;
+    /*服务器down了,无返回数据*/
+    public static final int CHACHE_HTTP_ERROR = 0x1006;
+    /*tokean过期，需要重新登录*/
+    public static final int CHACHE_TOKEAN_ERROR = 0x1007;
+    /*http请求返回失败*/
+    public static final int CHACHE_HTTP_POST_ERROR = 0x1008;
+    /*用户在其他设备登录*/
+    public static final int CHACHE_MORE_LOGIN_ERROR = 0x1009;
+    /*交互取消*/
+    public static final int HTTP_CANCEL = 0x1010;
+    /*交互取消*/
+    public static final int HTTP_DATA_NULL = 0x1011;
+    /*获取tokean失败*/
+    public static final int HTTP_TOKEAN_ERROR = 0x10112;
+    /*CONFIG失败*/
+    public static final int HTTP_CONFIG_ERROR = 0x10118;
+    /*下周文件写入io错误*/
+    public static final int HTTP_DOWN_WRITE = 0x10119;
 
     /**
-     * 转换错误数据
-     *
-     * @param code
-     * @return
+     * 服务器定义的错误code
      */
-    private static String getApiExceptionMessage(int code) {
-        switch (code) {
-            case UNKOWN_ERROR:
-                return "错误：网络错误";
-            case NO_CHACHE_ERROR:
-                return "错误：无缓存数据";
-            case CHACHE_TIMEOUT_ERROR:
-                return "错误：缓存数据过期";
-            default:
-                return "错误：未知错误";
-        }
+    private int code;
+
+    public HttpTimeException(int code, String detailMessage) {
+        super(detailMessage);
+        setCode(code);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }
 

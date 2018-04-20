@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.RxRetrofitApp;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.ApiException;
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.CodeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.cookie.CookieResulte;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
@@ -17,8 +16,8 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.utils.CookieDbUtil;
 
 import java.lang.ref.SoftReference;
 
-import rx.Observable;
 import rx.Subscriber;
+
 
 /**
  * 用于在Http请求开始时，自动显示一个ProgressDialog
@@ -27,8 +26,6 @@ import rx.Subscriber;
  * Created by WZG on 2016/7/16.
  */
 public class ProgressSubscriber<T> extends Subscriber<T> {
-    /*是否弹框*/
-    private boolean showPorgress = true;
     //    回调接口
     private SoftReference<HttpOnNextListener> mSubscriberOnNextListener;
     //    软引用反正内存泄露
@@ -49,7 +46,28 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         this.api = api;
         this.mSubscriberOnNextListener = listenerSoftReference;
         this.mActivity = mActivity;
-        setShowPorgress(api.isShowProgress());
+    }
+
+
+    /**
+     * 订阅开始时调用
+     * 显示ProgressDialog
+     */
+    @Override
+    public void onStart() {
+        /*缓存并且有网*/
+        if (api.isCache() && AppUtil.isNetworkAvailable(RxRetrofitApp.getApplication())) {
+            /*获取缓存数据*/
+            CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(api.getCacheUrl());
+            if (cookieResulte != null && mSubscriberOnNextListener.get() != null && (System.currentTimeMillis() - cookieResulte
+                    .getTime()) / 1000 < api.getCookieNetWorkTime()) {
+                mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
+                onCompleted();
+                unsubscribe();
+                return;
+            }
+        }
+
         if (api.isShowProgress()) {
             initProgressDialog(api.isCancel());
         }
@@ -60,6 +78,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      * 初始化加载框
      */
     private void initProgressDialog(boolean cancel) {
+        if (!api.isShowProgress()) return;
         Context context = mActivity.get();
         if (pd == null && context != null) {
             pd = new ProgressDialog(context);
@@ -73,19 +92,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                 });
             }
         }
-    }
-
-
-    /**
-     * 显示加载框
-     */
-    private void showProgressDialog() {
-        if (!isShowPorgress()) return;
-        Context context = mActivity.get();
-        if (pd == null || context == null) return;
-        if (!pd.isShowing()) {
-            pd.show();
-        }
+        pd.show();
     }
 
 
@@ -93,36 +100,11 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      * 隐藏
      */
     private void dismissProgressDialog() {
-        if (!isShowPorgress()) return;
-        if (pd != null && pd.isShowing()) {
+        if (pd != null) {
             pd.dismiss();
         }
     }
 
-
-    /**
-     * 订阅开始时调用
-     * 显示ProgressDialog
-     */
-    @Override
-    public void onStart() {
-        showProgressDialog();
-        /*缓存并且有网*/
-        if (api.isCache() && AppUtil.isNetworkAvailable(RxRetrofitApp.getApplication())) {
-             /*获取缓存数据*/
-            CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(api.getUrl());
-            if (cookieResulte != null) {
-                long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
-                if (time < api.getCookieNetWorkTime()) {
-                    if (mSubscriberOnNextListener.get() != null) {
-                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
-                    }
-                    onCompleted();
-                    unsubscribe();
-                }
-            }
-        }
-    }
 
     /**
      * 完成，隐藏ProgressDialog
@@ -142,7 +124,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     public void onError(Throwable e) {
         /*需要緩存并且本地有缓存才返回*/
         if (api.isCache()) {
-            getCache();
+            getCache(e);
         } else {
             errorDo(e);
         }
@@ -152,36 +134,20 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     /**
      * 获取cache数据
      */
-    private void getCache() {
-        Observable.just(api.getUrl()).subscribe(new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-
+    private void getCache(Throwable te) {
+        try {
+            /*获取缓存数据*/
+            CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(api.getCacheUrl());
+            if (cookieResulte == null) {
+                errorDo(te);
+                return;
             }
-
-            @Override
-            public void onError(Throwable e) {
-                errorDo(e);
+            if (mSubscriberOnNextListener.get() != null) {
+                mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
             }
-
-            @Override
-            public void onNext(String s) {
-                           /*获取缓存数据*/
-                CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(s);
-                if (cookieResulte == null) {
-                    throw new HttpTimeException(HttpTimeException.NO_CHACHE_ERROR);
-                }
-                long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
-                if (time < api.getCookieNoNetWorkTime()) {
-                    if (mSubscriberOnNextListener.get() != null) {
-                        mSubscriberOnNextListener.get().onNext(cookieResulte.getResulte(), api.getMethod());
-                    }
-                } else {
-                    CookieDbUtil.getInstance().deleteCookie(cookieResulte);
-                    throw new HttpTimeException(HttpTimeException.CHACHE_TIMEOUT_ERROR);
-                }
-            }
-        });
+        } catch (Exception e) {
+            errorDo(te == null ? e : te);
+        }
     }
 
 
@@ -195,13 +161,17 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         if (context == null) return;
         HttpOnNextListener httpOnNextListener = mSubscriberOnNextListener.get();
         if (httpOnNextListener == null) return;
+        ApiException apiException;
         if (e instanceof ApiException) {
-            httpOnNextListener.onError((ApiException) e,api.getMethod());
+            apiException = (ApiException) e;
+            httpOnNextListener.onError(apiException, api.getMethod());
         } else if (e instanceof HttpTimeException) {
             HttpTimeException exception = (HttpTimeException) e;
-            httpOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage()),api.getMethod());
+            apiException = new ApiException(exception, exception.getCode(), exception.getMessage());
+            httpOnNextListener.onError(apiException, api.getMethod());
         } else {
-            httpOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, e.getMessage()),api.getMethod());
+            apiException = new ApiException(e, HttpTimeException.UNKNOWN_ERROR, e.getMessage());
+            httpOnNextListener.onError(apiException, api.getMethod());
         }
     }
 
@@ -213,22 +183,21 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      */
     @Override
     public void onNext(T t) {
-         /*缓存处理*/
-        if (api.isCache()) {
-            CookieResulte resulte = CookieDbUtil.getInstance().queryCookieBy(api.getUrl());
-            long time = System.currentTimeMillis();
-            /*保存和更新本地数据*/
-            if (resulte == null) {
-                resulte = new CookieResulte(api.getUrl(), t.toString(), time);
-                CookieDbUtil.getInstance().saveCookie(resulte);
-            } else {
-                resulte.setResulte(t.toString());
-                resulte.setTime(time);
-                CookieDbUtil.getInstance().updateCookie(resulte);
-            }
-        }
         if (mSubscriberOnNextListener.get() != null) {
             mSubscriberOnNextListener.get().onNext((String) t, api.getMethod());
+        }
+
+        /*缓存处理*/
+        CookieResulte resulte = CookieDbUtil.getInstance().queryCookieBy(api.getCacheUrl());
+        long time = System.currentTimeMillis();
+        if (resulte == null && api.isCache()) {
+            resulte = new CookieResulte(api.getCacheUrl(), t.toString(), time);
+            CookieDbUtil.getInstance().saveCookie(resulte);
+        }
+        if (resulte != null) {
+            resulte.setResulte(t.toString());
+            resulte.setTime(time);
+            CookieDbUtil.getInstance().updateCookie(resulte);
         }
     }
 
@@ -239,21 +208,11 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     public void onCancelProgress() {
         if (!this.isUnsubscribed()) {
             this.unsubscribe();
+            if (api.isCache()) {
+                getCache(null);
+            } else {
+                errorDo(new ApiException(new Throwable(), HttpTimeException.HTTP_CANCEL, "请求取消！"));
+            }
         }
-    }
-
-
-
-    public boolean isShowPorgress() {
-        return showPorgress;
-    }
-
-    /**
-     * 是否需要弹框设置
-     *
-     * @param showPorgress
-     */
-    public void setShowPorgress(boolean showPorgress) {
-        this.showPorgress = showPorgress;
     }
 }

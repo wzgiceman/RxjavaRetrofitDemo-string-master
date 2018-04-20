@@ -4,6 +4,7 @@ import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpDownOnNextListen
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -34,6 +35,8 @@ public class DownInfo{
     private int stateInte;
     /*url*/
     private String url;
+    /*是否需要实时更新下载进度,避免线程的多次切换*/
+    private boolean updateProgress;
 
     public DownInfo(String url,HttpDownOnNextListener listener) {
         setUrl(url);
@@ -44,7 +47,7 @@ public class DownInfo{
         setUrl(url);
     }
 
-    @Generated(hash = 656702907)
+    @Keep
     public DownInfo(long id, String savePath, long countLength, long readLength,
             int connectonTime, int stateInte, String url) {
         this.id = id;
@@ -56,10 +59,33 @@ public class DownInfo{
         this.url = url;
     }
 
-    @Generated(hash = 928324469)
     public DownInfo() {
+        readLength=0l;
+        countLength=0l;
+        stateInte=DownState.START.getState();
     }
 
+    @Generated(hash = 1860227052)
+    public DownInfo(long id, String savePath, long countLength, long readLength,
+            int connectonTime, int stateInte, String url, boolean updateProgress) {
+        this.id = id;
+        this.savePath = savePath;
+        this.countLength = countLength;
+        this.readLength = readLength;
+        this.connectonTime = connectonTime;
+        this.stateInte = stateInte;
+        this.url = url;
+        this.updateProgress = updateProgress;
+    }
+
+
+    public boolean isUpdateProgress() {
+        return updateProgress;
+    }
+
+    public void setUpdateProgress(boolean updateProgress) {
+        this.updateProgress = updateProgress;
+    }
 
     public DownState getState() {
         switch (getStateInte()){
@@ -157,4 +183,11 @@ public class DownInfo{
     public void setConnectonTime(int connectonTime) {
         this.connectonTime = connectonTime;
     }
+
+    public boolean getUpdateProgress() {
+        return this.updateProgress;
+    }
+
+
+    
 }

@@ -15,18 +15,17 @@ public class ApiException extends Exception{
         super(e);
     }
 
-    public ApiException(Throwable cause,@CodeException.CodeEp int code, String showMsg) {
+    public ApiException(Throwable cause, int code, String showMsg) {
         super(showMsg, cause);
         setCode(code);
         setDisplayMessage(showMsg);
     }
 
-    @CodeException.CodeEp
     public int getCode() {
         return code;
     }
 
-    public void setCode(@CodeException.CodeEp int code) {
+    public void setCode( int code) {
         this.code = code;
     }
 

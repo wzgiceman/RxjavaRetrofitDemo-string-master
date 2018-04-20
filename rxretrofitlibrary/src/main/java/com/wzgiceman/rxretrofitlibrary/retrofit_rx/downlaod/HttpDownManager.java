@@ -1,5 +1,8 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.downlaod.DownLoadListener.DownloadInterceptor;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.HttpTimeException;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
@@ -41,11 +44,14 @@ public class HttpDownManager {
     private volatile static HttpDownManager INSTANCE;
     /*数据库类*/
     private DbDwonUtil db;
+    /*控制下载进度回掉到主线程*/
+    private Handler handler;
 
     private HttpDownManager() {
         downInfos = new HashSet<>();
         subMap = new HashMap<>();
         db = DbDwonUtil.getInstance();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     /**
@@ -75,7 +81,7 @@ public class HttpDownManager {
             return;
         }
         /*添加回调处理类*/
-        ProgressDownSubscriber subscriber = new ProgressDownSubscriber(info);
+        ProgressDownSubscriber subscriber = new ProgressDownSubscriber(info, handler);
         /*记录回调sub*/
         subMap.put(info.getUrl(), subscriber);
         /*获取service，多次请求公用一个sercie*/
@@ -104,7 +110,7 @@ public class HttpDownManager {
                 /*指定线程*/
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                   /*失败后的retry配置*/
+                /*失败后的retry配置*/
                 .retryWhen(new RetryWhenNetworkException())
                 /*读取下载写入文件*/
                 .map(new Func1<ResponseBody, DownInfo>() {
@@ -229,7 +235,7 @@ public class HttpDownManager {
                     mappedBuffer.put(buffer, 0, len);
                 }
             } catch (IOException e) {
-                throw new HttpTimeException(e.getMessage());
+                throw new HttpTimeException(HttpTimeException.HTTP_DOWN_WRITE, e.getMessage());
             } finally {
                 if (inputStream != null) {
                     inputStream.close();
@@ -242,7 +248,7 @@ public class HttpDownManager {
                 }
             }
         } catch (IOException e) {
-            throw new HttpTimeException(e.getMessage());
+            throw new HttpTimeException(HttpTimeException.HTTP_DOWN_WRITE,e.getMessage());
         }
     }
 
