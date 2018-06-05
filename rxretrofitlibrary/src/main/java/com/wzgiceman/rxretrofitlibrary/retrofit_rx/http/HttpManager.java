@@ -45,29 +45,35 @@ public class HttpManager {
         this.appCompatActivity = new SoftReference(appCompatActivity);
     }
 
+    public HttpManager(RxAppCompatActivity appCompatActivity) {
+        this.appCompatActivity = new SoftReference(appCompatActivity);
+    }
+
+    public HttpManager() {
+
+    }
+
 
     /**
      * 处理http请求
      *
      * @param basePar 封装的请求数据
      */
-    public void doHttpDeal(final BaseApi basePar) {
-        Retrofit retrofit = getReTrofit(basePar.getConnectionTime(), basePar.getBaseUrl());
-        httpDeal(basePar.getObservable(retrofit), basePar);
+    public Observable<String> doHttpDeal(final BaseApi basePar) {
+        return httpDeal(getReTrofit(basePar), basePar);
     }
 
 
     /**
      * 获取Retrofit对象
      *
-     * @param connectTime
-     * @param baseUrl
+     * @param basePar
      * @return
      */
-    public Retrofit getReTrofit(int connectTime, String baseUrl) {
+    public Retrofit getReTrofit(final BaseApi basePar) {
         //手动创建一个OkHttpClient并设置超时时间缓存等设置
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(connectTime, TimeUnit.SECONDS);
+        builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
         if (RxRetrofitApp.isDebug()) {
             builder.addInterceptor(getHttpLoggingInterceptor());
         }
@@ -77,7 +83,7 @@ public class HttpManager {
                 .client(builder.build())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(baseUrl)
+                .baseUrl(basePar.getBaseUrl())
                 .build();
         return retrofit;
     }
@@ -85,19 +91,18 @@ public class HttpManager {
     /**
      * RxRetrofit处理
      *
-     * @param observable
      * @param basePar
      */
-    public void httpDeal(Observable observable, BaseApi basePar) {
-          /*失败后的retry配置*/
-        observable = observable.retryWhen(new RetryWhenNetworkException(basePar.getRetryCount(),
-                basePar.getRetryDelay(), basePar.getRetryIncreaseDelay()))
+    public Observable httpDeal(Retrofit retrofit, BaseApi basePar) {
+        /*失败后的retry配置*/
+        Observable observable = basePar.getObservable(retrofit)
+                /*失败后retry处理控制*/
+                .retryWhen(new RetryWhenNetworkException(basePar.getRetryCount(),
+                        basePar.getRetryDelay(), basePar.getRetryIncreaseDelay()))
                 /*异常处理*/
                 .onErrorResumeNext(new ExceptionFunc())
-                /*生命周期管理*/
-                //.compose(appCompatActivity.get().bindToLifecycle())
-                //Note:手动设置在activity onDestroy的时候取消订阅
-                .compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY))
+                /*tokean过期统一处理*/
+//                .flatMap(new TokeanFunc(basePar, retrofit))
                 /*返回数据统一判断*/
                 .map(new ResulteFunc())
                 /*http请求线程*/
@@ -105,6 +110,16 @@ public class HttpManager {
                 .unsubscribeOn(Schedulers.io())
                 /*回调线程*/
                 .observeOn(AndroidSchedulers.mainThread());
+
+        /*生命周期管理*/
+        if (appCompatActivity != null) {
+            observable.compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY));
+        }
+
+        /*是否不需要处理sub对象*/
+        if (basePar.isNoSub()) {
+            return observable;
+        }
 
         /*ober回调，链接式返回*/
         if (onNextSubListener != null && null != onNextSubListener.get()) {
@@ -116,6 +131,8 @@ public class HttpManager {
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
             observable.subscribe(subscriber);
         }
+
+        return observable;
     }
 
     /**
