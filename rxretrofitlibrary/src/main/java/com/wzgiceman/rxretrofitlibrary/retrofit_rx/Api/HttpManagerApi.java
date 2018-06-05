@@ -24,12 +24,12 @@ public class HttpManagerApi extends BaseApi {
     }
 
     protected Retrofit getRetrofit() {
-        return  manager.getReTrofit(getConnectionTime(), getBaseUrl());
+        return manager.getReTrofit(this);
     }
 
 
-    protected void doHttpDeal(Observable observable) {
-            manager.httpDeal(observable, this);
+    protected void doHttpDeal(Retrofit retrofit) {
+        manager.httpDeal(retrofit, this);
     }
 
     @Override

@@ -27,7 +27,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * http交互处理类
- * Created by WZG on 2016/7/16.
+ * Created by WZG on 2016/7/16.basePar
  */
 public class HttpManager {
     /*软引用對象*/
